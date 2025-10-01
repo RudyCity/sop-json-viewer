@@ -390,25 +390,52 @@ class SOP_JSON_Viewer {
     public function ajax_save_sop_data() {
         // Check nonce untuk security
         if (!wp_verify_nonce($_POST['nonce'], 'sjp_nonce')) {
+            error_log('[SOP JSON Viewer] Save failed: Security check failed for SOP data save attempt');
             wp_send_json_error('Security check failed');
         }
 
         // Check user capability
         if (!current_user_can('manage_options')) {
+            error_log('[SOP JSON Viewer] Save failed: Insufficient permissions for user ' . get_current_user_id());
             wp_send_json_error('Insufficient permissions');
         }
 
         $sop_id = sanitize_text_field($_POST['sop_id']);
         $sop_data = wp_unslash($_POST['sop_data']);
 
+        // Log save attempt details
+        $data_size = strlen($sop_data);
+        error_log(sprintf(
+            '[SOP JSON Viewer] Save attempt - SOP ID: %s, Data size: %d bytes, User ID: %d',
+            $sop_id,
+            $data_size,
+            get_current_user_id()
+        ));
+
         // Validate JSON
         $decoded_data = json_decode($sop_data, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
+            $error_msg = sprintf(
+                'Invalid JSON format for SOP ID "%s": %s (Error code: %d)',
+                $sop_id,
+                json_last_error_msg(),
+                json_last_error()
+            );
+            error_log('[SOP JSON Viewer] ' . $error_msg);
             wp_send_json_error('Invalid JSON format: ' . json_last_error_msg());
         }
 
         // Sanitize data sebelum save
         $sanitized_data = $this->sanitize_sop_data($decoded_data);
+
+        // Log sanitized data structure for debugging
+        $sanitized_sections = isset($sanitized_data['sections']) ? count($sanitized_data['sections']) : 0;
+        error_log(sprintf(
+            '[SOP JSON Viewer] Sanitized data - SOP ID: %s, Sections count: %d, Title: %s',
+            $sop_id,
+            $sanitized_sections,
+            isset($sanitized_data['title']) ? $sanitized_data['title'] : 'No title'
+        ));
 
         // Save ke database
         $result = update_option('sjp_sop_data_' . $sop_id, $sanitized_data);
@@ -417,9 +444,39 @@ class SOP_JSON_Viewer {
             // Clear cache jika ada
             wp_cache_delete('sjp_sop_data_' . $sop_id);
 
+            error_log(sprintf(
+                '[SOP JSON Viewer] Save successful - SOP ID: %s, Data size: %d bytes',
+                $sop_id,
+                $data_size
+            ));
             wp_send_json_success('SOP data saved successfully');
         } else {
-            wp_send_json_error('Failed to save SOP data');
+            // Detailed error logging for failed saves
+            $error_details = sprintf(
+                'Failed to save SOP data - SOP ID: %s, Data size: %d bytes, User ID: %d, Option name: %s',
+                $sop_id,
+                $data_size,
+                get_current_user_id(),
+                'sjp_sop_data_' . $sop_id
+            );
+
+            // Check if option already exists and has the same value (no actual change)
+            $existing_data = get_option('sjp_sop_data_' . $sop_id);
+            if ($existing_data === $sanitized_data) {
+                $error_details .= ', Reason: Data identical to existing (update_option returns false for identical data)';
+                error_log('[SOP JSON Viewer] ' . $error_details);
+                wp_send_json_success('SOP data saved successfully (no changes detected)');
+            } else {
+                // Check for database errors
+                global $wpdb;
+                $error_details .= sprintf(
+                    ', Database errors: %s, WordPress errors: %s',
+                    $wpdb->last_error,
+                    $wpdb->last_query
+                );
+                error_log('[SOP JSON Viewer] ' . $error_details);
+                wp_send_json_error('Failed to save SOP data - check debug log for details');
+            }
         }
     }
 
