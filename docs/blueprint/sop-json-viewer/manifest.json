@@ -1,0 +1,9 @@
+{
+  "name": "SOP JSON Viewer",
+  "slug": "sop-json-viewer",
+  "version": "1.0.0",
+  "author": "Rudy Hermawan (hrudy715@gmail.com)",
+  "date": "2025-10-01",
+  "description": "Plugin WordPress untuk menampilkan konten SOP dalam format accordion interaktif menggunakan data JSON dengan editor validasi real-time",
+  "tags": ["blueprint", "idea", "wordpress", "sop", "json", "accordion", "shortcode"]
+}

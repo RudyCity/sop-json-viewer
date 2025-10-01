@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP JSON Viewer - Minimalistic Design</title>
+    <link rel="stylesheet" href="assets/css/sop-accordion.css">
+    <style>
+        body {
+            background: #f8fafc;
+            min-height: 100vh;
+            padding: 40px 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+        
+        .page-header p {
+            font-size: 1rem;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .demo-info {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 32px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .demo-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+        
+        .demo-info ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #6b7280;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .demo-info li {
+            margin-bottom: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 16px;
+            }
+            
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .demo-info {
+                padding: 16px;
+                margin-bottom: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1>SOP JSON Viewer</h1>
+            <p>Minimalistic accordion component with clean design and smooth interactions</p>
+        </div>
+        
+        <div class="demo-info">
+            <h3>Features</h3>
+            <ul>
+                <li>Click on sections to expand/collapse content</li>
+                <li>Use keyboard navigation (Tab, Enter, Arrow keys, Escape)</li>
+                <li>Fully responsive design for all devices</li>
+                <li>Minimalistic design with light colors</li>
+                <li>Smooth animations and transitions</li>
+            </ul>
+        </div>
+        
+        <div class="sop-json-viewer" data-sop-id="test">
+            <h2 class="sop-title">Standard Operating Procedures</h2>
+            <p class="sop-description">Comprehensive guide for operational excellence with clean, minimalistic design that focuses on content clarity and usability.</p>
+
+            <div class="sop-accordion">
+                <!-- Preparation Section -->
+                <div class="sop-section">
+                    <button class="sop-section-header" aria-expanded="false" aria-controls="content-1">
+                        <span>📋 Preparation & Setup</span>
+                        <span class="sop-toggle-icon">+</span>
+                    </button>
+                    <div class="sop-section-content" id="content-1" hidden>
+                        <div class="sop-content">
+                            <p>Before commencing any operational procedure, ensure all preparatory steps are completed. This includes gathering necessary materials, checking equipment status, and reviewing safety protocols.</p>
+
+                            <div class="sop-subsections">
+                                <div class="sop-section">
+                                    <button class="sop-section-header" aria-expanded="false" aria-controls="subcontent-1-1">
+                                        <span>🔧 Equipment Checklist</span>
+                                        <span class="sop-toggle-icon">+</span>
+                                    </button>
+                                    <div class="sop-section-content" id="subcontent-1-1" hidden>
+                                        <div class="sop-content">
+                                            <p>Verify all equipment is operational and calibrated. Check for any damage or wear that might affect performance.</p>
+                                            <p><strong>Required items:</strong> Safety gear, measuring tools, communication devices.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="sop-section">
+                                    <button class="sop-section-header" aria-expanded="false" aria-controls="subcontent-1-2">
+                                        <span>📚 Documentation Review</span>
+                                        <span class="sop-toggle-icon">+</span>
+                                    </button>
+                                    <div class="sop-section-content" id="subcontent-1-2" hidden>
+                                        <div class="sop-content">
+                                            <p>Review all relevant documentation including <a href="#safety-protocols">safety protocols</a>, operational manuals, and emergency procedures.</p>
+                                            <p>Ensure you have the latest version of all documents.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Execution Section -->
+                <div class="sop-section">
+                    <button class="sop-section-header" aria-expanded="false" aria-controls="content-2">
+                        <span>⚡ Execution Phase</span>
+                        <span class="sop-toggle-icon">+</span>
+                    </button>
+                    <div class="sop-section-content" id="content-2" hidden>
+                        <div class="sop-content">
+                            <p>During the execution phase, follow the established procedures while maintaining constant awareness of safety and efficiency. Monitor progress and be prepared to adjust based on real-time conditions.</p>
+
+                            <div class="sop-subsections">
+                                <div class="sop-section">
+                                    <button class="sop-section-header" aria-expanded="false" aria-controls="subcontent-2-1">
+                                        <span>🎯 Step-by-Step Process</span>
+                                        <span class="sop-toggle-icon">+</span>
+                                    </button>
+                                    <div class="sop-section-content" id="subcontent-2-1" hidden>
+                                        <div class="sop-content">
+                                            <p>Execute each step methodically, ensuring quality and accuracy. Take progress photos when required for documentation purposes.</p>
+                                            <p>Maintain clear communication with team members throughout the process.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="sop-section">
+                                    <button class="sop-section-header" aria-expanded="false" aria-controls="subcontent-2-2">
+                                        <span>📊 Quality Assurance</span>
+                                        <span class="sop-toggle-icon">+</span>
+                                    </button>
+                                    <div class="sop-section-content" id="subcontent-2-2" hidden>
+                                        <div class="sop-content">
+                                            <p>Implement quality checks at key milestones. Document any deviations from standard procedures and their justifications.</p>
+                                            <p>Ensure all work meets the established quality standards.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Safety Section -->
+                <div class="sop-section">
+                    <button class="sop-section-header" aria-expanded="false" aria-controls="content-3">
+                        <span>🛡️ Safety Protocols</span>
+                        <span class="sop-toggle-icon">+</span>
+                    </button>
+                    <div class="sop-section-content" id="content-3" hidden>
+                        <div class="sop-content">
+                            <p>Safety is paramount in all operations. This section outlines critical safety measures and emergency response procedures that must be followed at all times.</p>
+
+                            <div class="sop-subsections">
+                                <div class="sop-section">
+                                    <button class="sop-section-header" aria-expanded="false" aria-controls="subcontent-3-1">
+                                        <span>⚠️ Emergency Procedures</span>
+                                        <span class="sop-toggle-icon">+</span>
+                                    </button>
+                                    <div class="sop-section-content" id="subcontent-3-1" hidden>
+                                        <div class="sop-content">
+                                            <p>In case of emergency, immediately stop all operations and follow the established emergency response plan.</p>
+                                            <p>Contact emergency services if required and notify all team members.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="sop-section">
+                                    <button class="sop-section-header" aria-expanded="false" aria-controls="subcontent-3-2">
+                                        <span>🩹 First Aid Guidelines</span>
+                                        <span class="sop-toggle-icon">+</span>
+                                    </button>
+                                    <div class="sop-section-content" id="subcontent-3-2" hidden>
+                                        <div class="sop-content">
+                                            <p>Be familiar with basic first aid procedures and know the location of first aid kits.</p>
+                                            <p>Report all incidents using the established incident reporting system.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Completion Section -->
+                <div class="sop-section">
+                    <button class="sop-section-header" aria-expanded="false" aria-controls="content-4">
+                        <span>✅ Completion & Review</span>
+                        <span class="sop-toggle-icon">+</span>
+                    </button>
+                    <div class="sop-section-content" id="content-4" hidden>
+                        <div class="sop-content">
+                            <p>Upon completion of the procedure, conduct a thorough review to ensure all requirements have been met and document lessons learned for continuous improvement.</p>
+
+                            <div class="sop-subsections">
+                                <div class="sop-section">
+                                    <button class="sop-section-header" aria-expanded="false" aria-controls="subcontent-4-1">
+                                        <span>📝 Documentation</span>
+                                        <span class="sop-toggle-icon">+</span>
+                                    </button>
+                                    <div class="sop-section-content" id="subcontent-4-1" hidden>
+                                        <div class="sop-content">
+                                            <p>Complete all required documentation including completion reports, time logs, and quality assurance records.</p>
+                                            <p>File documents appropriately for future reference and audits.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="sop-section">
+                                    <button class="sop-section-header" aria-expanded="false" aria-controls="subcontent-4-2">
+                                        <span>🔄 Process Improvement</span>
+                                        <span class="sop-toggle-icon">+</span>
+                                    </button>
+                                    <div class="sop-section-content" id="subcontent-4-2" hidden>
+                                        <div class="sop-content">
+                                            <p>Review the process for potential improvements. Document suggestions for enhancing efficiency or safety.</p>
+                                            <p>Share lessons learned with the team for continuous improvement.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/sop-accordion.js"></script>
+    <script>
+        // Add keyboard shortcuts for demo
+        document.addEventListener('DOMContentLoaded', function() {
+            // Listen for accordion events
+            const accordion = document.querySelector('.sop-json-viewer');
+            
+            accordion.addEventListener('sop:sectionOpened', function(e) {
+                console.log('Section opened:', e.detail.header.textContent.trim());
+            });
+            
+            accordion.addEventListener('sop:sectionClosed', function(e) {
+                console.log('Section closed:', e.detail.header.textContent.trim());
+            });
+            
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Press '1'-'4' to open sections
+                if (e.key >= '1' && e.key <= '4' && !e.target.matches('input, textarea')) {
+                    e.preventDefault();
+                    const index = parseInt(e.key) - 1;
+                    const sopAccordion = accordion.SOPAccordion || window.SOPAccordion;
+                    if (sopAccordion) {
+                        sopAccordion.openSectionByIndex(index);
+                    }
+                }
+                
+                // Press 'Escape' to close all sections
+                if (e.key === 'Escape' && !e.target.matches('input, textarea')) {
+                    e.preventDefault();
+                    const sopAccordion = accordion.SOPAccordion || window.SOPAccordion;
+                    if (sopAccordion) {
+                        sopAccordion.closeAllSections();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

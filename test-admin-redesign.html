@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP JSON Viewer - Admin Redesign Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dashicons/1.0.0/dashicons.min.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <link rel="stylesheet" href="assets/css/sop-accordion.css">
+    <style>
+        body {
+            background: #f1f5f9;
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .test-header h1 {
+            margin: 0 0 10px 0;
+            color: #1f2937;
+        }
+        
+        .test-header p {
+            margin: 0;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>SOP JSON Viewer - Admin Redesign Test</h1>
+        <p>Testing the redesigned admin interface with modern UI/UX and fixed preview functionality</p>
+    </div>
+
+    <div class="sjp-admin-wrapper">
+        <div class="sjp-admin-header">
+            <div class="sjp-admin-title">
+                <h1>SOP JSON Viewer</h1>
+                <p>Manage and preview your Standard Operating Procedures</p>
+            </div>
+            <div class="sjp-admin-actions">
+                <button type="button" class="sjp-btn sjp-btn-help" id="sjp-help-toggle">
+                    <span class="dashicons dashicons-help"></span>
+                    Help
+                </button>
+            </div>
+        </div>
+
+        <div class="sjp-admin-layout">
+            <!-- Main Editor Section -->
+            <div class="sjp-editor-panel">
+                <div class="sjp-panel-header">
+                    <h2>SOP Editor</h2>
+                    <div class="sjp-panel-tabs">
+                        <button class="sjp-tab active" data-tab="editor">JSON Editor</button>
+                        <button class="sjp-tab" data-tab="template">Templates</button>
+                    </div>
+                </div>
+
+                <div class="sjp-panel-content">
+                    <!-- Editor Tab -->
+                    <div class="sjp-tab-content active" id="editor-tab">
+                        <form id="sjp-sop-form" method="post" action="">
+                            <div class="sjp-form-grid">
+                                <div class="sjp-form-group">
+                                    <label for="sop_id" class="sjp-label">
+                                        SOP ID
+                                        <span class="sjp-required">*</span>
+                                    </label>
+                                    <div class="sjp-input-group">
+                                        <input type="text"
+                                               id="sop_id"
+                                               name="sop_id"
+                                               value="test-sop"
+                                               class="sjp-input"
+                                               required />
+                                        <span class="sjp-input-icon dashicons dashicons-text-page"></span>
+                                    </div>
+                                    <p class="sjp-help-text">
+                                        Unique identifier for this SOP (use lowercase, hyphen-separated)
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="sjp-editor-container">
+                                <div class="sjp-editor-header">
+                                    <label class="sjp-label">JSON Data</label>
+                                    <div class="sjp-editor-tools">
+                                        <button type="button" class="sjp-tool-btn" id="sjp-format-json" title="Format JSON">
+                                            <span class="dashicons dashicons-editor-code"></span>
+                                        </button>
+                                        <button type="button" class="sjp-tool-btn" id="sjp-clear-editor" title="Clear Editor">
+                                            <span class="dashicons dashicons-trash"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="sjp-json-editor-wrapper">
+                                    <div id="sjp-json-editor"></div>
+                                    <textarea id="sjp-json-textarea"
+                                              name="sop_json_data"
+                                              class="sjp-json-textarea"
+                                              style="display: none;">{
+  "title": "Contoh SOP",
+  "description": "Deskripsi singkat tentang SOP ini",
+  "sections": [
+    {
+      "title": "Bagian 1: Pengenalan",
+      "content": "Konten pengenalan dengan **formatting** dan [link](https://example.com).",
+      "subsections": [
+        {
+          "title": "Sub-bagian 1.1",
+          "content": "Konten sub-bagian pertama"
+        }
+      ]
+    },
+    {
+      "title": "Bagian 2: Proses",
+      "content": "Konten proses utama"
+    }
+  ]
+}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="sjp-validation-status" id="sjp-validation-status"></div>
+
+                            <div class="sjp-form-actions">
+                                <button type="submit" class="sjp-btn sjp-btn-primary">
+                                    <span class="dashicons dashicons-saved"></span>
+                                    Save SOP Data
+                                </button>
+                                <button type="button" class="sjp-btn sjp-btn-secondary" id="sjp-load-data">
+                                    <span class="dashicons dashicons-upload"></span>
+                                    Load Existing
+                                </button>
+                                <button type="button" class="sjp-btn sjp-btn-secondary" id="sjp-export-data">
+                                    <span class="dashicons dashicons-download"></span>
+                                    Export JSON
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Templates Tab -->
+                    <div class="sjp-tab-content" id="template-tab">
+                        <div class="sjp-template-grid">
+                            <div class="sjp-template-card" data-template="basic">
+                                <div class="sjp-template-icon">📄</div>
+                                <h3>Basic SOP</h3>
+                                <p>Simple SOP structure with basic sections</p>
+                                <button class="sjp-btn sjp-btn-sm">Use Template</button>
+                            </div>
+                            <div class="sjp-template-card" data-template="advanced">
+                                <div class="sjp-template-icon">📊</div>
+                                <h3>Advanced SOP</h3>
+                                <p>Complex SOP with nested subsections</p>
+                                <button class="sjp-btn sjp-btn-sm">Use Template</button>
+                            </div>
+                            <div class="sjp-template-card" data-template="safety">
+                                <div class="sjp-template-icon">🛡️</div>
+                                <h3>Safety Protocol</h3>
+                                <p>Safety-focused SOP with emergency procedures</p>
+                                <button class="sjp-btn sjp-btn-sm">Use Template</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="sjp-preview-panel">
+                <div class="sjp-panel-header">
+                    <h2>Live Preview</h2>
+                    <div class="sjp-preview-tools">
+                        <button type="button" class="sjp-tool-btn" id="sjp-preview-refresh" title="Refresh Preview">
+                            <span class="dashicons dashicons-update"></span>
+                        </button>
+                        <button type="button" class="sjp-tool-btn" id="sjp-preview-fullscreen" title="Fullscreen">
+                            <span class="dashicons dashicons-fullscreen-alt"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="sjp-preview-content">
+                    <div id="sjp-preview-container">
+                        <div class="sjp-preview-placeholder">
+                            <div class="sjp-preview-icon">👁️</div>
+                            <h3>Preview: Contoh SOP</h3>
+                            <p>Preview akan muncul di sini setelah Anda memasukkan data JSON yang valid.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Modal -->
+        <div class="sjp-modal" id="sjp-help-modal">
+            <div class="sjp-modal-content">
+                <div class="sjp-modal-header">
+                    <h3>How to Use SOP JSON Viewer</h3>
+                    <button type="button" class="sjp-modal-close" id="sjp-help-close">
+                        <span class="dashicons dashicons-no-alt"></span>
+                    </button>
+                </div>
+                <div class="sjp-modal-body">
+                    <div class="sjp-help-section">
+                        <h4>Getting Started</h4>
+                        <ol>
+                            <li>Enter a unique SOP ID</li>
+                            <li>Edit JSON data in the editor or use a template</li>
+                            <li>Preview your changes in real-time</li>
+                            <li>Save your SOP data</li>
+                        </ol>
+                    </div>
+                    <div class="sjp-help-section">
+                        <h4>JSON Structure</h4>
+                        <pre><code>{
+  "title": "SOP Title",
+  "description": "SOP Description",
+  "sections": [
+    {
+      "title": "Section Title",
+      "content": "Section content with HTML support",
+      "subsections": [
+        {
+          "title": "Subsection Title",
+          "content": "Subsection content"
+        }
+      ]
+    }
+  ]
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mock WordPress functions for testing -->
+    <script>
+        // Mock WordPress environment
+        window.wp = {
+            codeEditor: {
+                initialize: function(textarea, options) {
+                    return {
+                        codemirror: {
+                            getValue: function() {
+                                return textarea.value;
+                            },
+                            setValue: function(value) {
+                                textarea.value = value;
+                            },
+                            on: function(event, callback) {
+                                // Simple change detection
+                                textarea.addEventListener('input', callback);
+                            }
+                        }
+                    };
+                }
+            }
+        };
+
+        // Mock AJAX for testing
+        window.sjp_ajax = {
+            ajax_url: '#',
+            nonce: 'test-nonce'
+        };
+    </script>
+    
+    <script src="assets/js/sop-accordion.js"></script>
+    <script src="assets/js/admin-editor.js"></script>
+    
+    <script>
+        // Test the preview functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Testing SOP JSON Viewer Admin Redesign');
+            
+            // Simulate initial validation
+            setTimeout(() => {
+                const editor = new SOPJSONEditor();
+                console.log('SOP JSON Editor initialized');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP JSON Viewer - Link Content Test</title>
+    <link rel="stylesheet" href="assets/css/sop-accordion.css">
+    <style>
+        body {
+            background: #f8fafc;
+            min-height: 100vh;
+            padding: 40px 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+        
+        .page-header p {
+            font-size: 1rem;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .demo-info {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 32px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .demo-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+        
+        .demo-info ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #6b7280;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .demo-info li {
+            margin-bottom: 4px;
+        }
+        
+        .json-preview {
+            background: #f8f9fa;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 32px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+        }
+        
+        .json-preview h3 {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            color: #1f2937;
+        }
+        
+        .json-preview pre {
+            margin: 0;
+            white-space: pre-wrap;
+            color: #374151;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 16px;
+            }
+            
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .demo-info {
+                padding: 16px;
+                margin-bottom: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1>SOP JSON Viewer - Link Content Test</h1>
+            <p>Testing the new link content type feature with interactive link lists and enhanced styling</p>
+        </div>
+        
+        <div class="demo-info">
+            <h3>New Features</h3>
+            <ul>
+                <li>Content can now be an array of link objects with type, title, url, and target</li>
+                <li>Enhanced styling for link lists with hover effects and animations</li>
+                <li>Support for both internal and external links</li>
+                <li>Mixed content support - sections can have either HTML content or link arrays</li>
+                <li>Responsive design that works on all devices</li>
+            </ul>
+        </div>
+        
+        <div class="json-preview">
+            <h3>Example JSON Structure</h3>
+            <pre>{
+  "title": "SOP dengan Link Content",
+  "sections": [
+    {
+      "title": "📚 Referensi & Dokumentasi",
+      "content": [
+        {
+          "type": "link",
+          "title": "Manual Panduan Operasional",
+          "url": "https://example.com/manual",
+          "target": "_blank"
+        }
+      ]
+    }
+  ]
+}</pre>
+        </div>
+        
+        <div class="sop-json-viewer" data-sop-id="test-links">
+            <h2 class="sop-title">SOP dengan Link Content</h2>
+            <p class="sop-description">Contoh SOP yang menampilkan berbagai jenis content termasuk link list dengan styling modern dan interaktif.</p>
+
+            <div class="sop-accordion">
+                <!-- Referensi Section -->
+                <div class="sop-section">
+                    <button class="sop-section-header" aria-expanded="false" aria-controls="content-1">
+                        <span>📚 Referensi & Dokumentasi</span>
+                        <span class="sop-toggle-icon">+</span>
+                    </button>
+                    <div class="sop-section-content" id="content-1" hidden>
+                        <div class="sop-content">
+                            <div class="sop-link-item">
+                                <a href="https://example.com/manual-operasional" target="_blank" class="sop-link">
+                                    <span class="sop-link-title">Manual Panduan Operasional</span>
+                                    <span class="sop-link-icon" aria-hidden="true">→</span>
+                                </a>
+                            </div>
+                            <div class="sop-link-item">
+                                <a href="/wp-content/uploads/safety-guidelines.pdf" target="_blank" class="sop-link">
+                                    <span class="sop-link-title">Safety Guidelines PDF</span>
+                                    <span class="sop-link-icon" aria-hidden="true">→</span>
+                                </a>
+                            </div>
+                            <div class="sop-link-item">
+                                <a href="/forms/incident-report" class="sop-link">
+                                    <span class="sop-link-title">Form Laporan Insiden</span>
+                                    <span class="sop-link-icon" aria-hidden="true">→</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Link Ekstern Section -->
+                <div class="sop-section">
+                    <button class="sop-section-header" aria-expanded="false" aria-controls="content-2">
+                        <span>🔗 Link Ekstern Penting</span>
+                        <span class="sop-toggle-icon">+</span>
+                    </button>
+                    <div class="sop-section-content" id="content-2" hidden>
+                        <div class="sop-content">
+                            <div class="sop-link-item">
+                                <a href="https://company-website.com" target="_blank" class="sop-link">
+                                    <span class="sop-link-title">Website Resmi Perusahaan</span>
+                                    <span class="sop-link-icon" aria-hidden="true">→</span>
+                                </a>
+                            </div>
+                            <div class="sop-link-item">
+                                <a href="https://portal.company.com" target="_blank" class="sop-link">
+                                    <span class="sop-link-title">Portal Karyawan</span>
+                                    <span class="sop-link-icon" aria-hidden="true">→</span>
+                                </a>
+                            </div>
+                            <div class="sop-link-item">
+                                <a href="https://training.company.com" target="_blank" class="sop-link">
+                                    <span class="sop-link-title">Sistem Training Online</span>
+                                    <span class="sop-link-icon" aria-hidden="true">→</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Regular Content Section -->
+                <div class="sop-section">
+                    <button class="sop-section-header" aria-expanded="false" aria-controls="content-3">
+                        <span>📋 Prosedur Standar</span>
+                        <span class="sop-toggle-icon">+</span>
+                    </button>
+                    <div class="sop-section-content" id="content-3" hidden>
+                        <div class="sop-content">
+                            <p>Berikut adalah prosedur standar yang harus diikuti:</p>
+                            <ol>
+                                <li>Persiapan awal dan checklist peralatan</li>
+                                <li>Eksekusi prosedur sesuai langkah-langkah</li>
+                                <li>Quality control dan dokumentasi</li>
+                                <li>Cleanup dan reporting</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tools Section with Subsections -->
+                <div class="sop-section">
+                    <button class="sop-section-header" aria-expanded="false" aria-controls="content-4">
+                        <span>🛠️ Tools & Software</span>
+                        <span class="sop-toggle-icon">+</span>
+                    </button>
+                    <div class="sop-section-content" id="content-4" hidden>
+                        <div class="sop-content">
+                            <div class="sop-link-item">
+                                <a href="https://pm-tool.company.com" target="_blank" class="sop-link">
+                                    <span class="sop-link-title">Project Management Tool</span>
+                                    <span class="sop-link-icon" aria-hidden="true">→</span>
+                                </a>
+                            </div>
+                            <div class="sop-link-item">
+                                <a href="/time-tracking" class="sop-link">
+                                    <span class="sop-link-title">Time Tracking System</span>
+                                    <span class="sop-link-icon" aria-hidden="true">→</span>
+                                </a>
+                            </div>
+                            <div class="sop-link-item">
+                                <a href="/documents" class="sop-link">
+                                    <span class="sop-link-title">Document Repository</span>
+                                    <span class="sop-link-icon" aria-hidden="true">→</span>
+                                </a>
+                            </div>
+
+                            <div class="sop-subsections">
+                                <div class="sop-section">
+                                    <button class="sop-section-header" aria-expanded="false" aria-controls="subcontent-4-1">
+                                        <span>Akses & Login</span>
+                                        <span class="sop-toggle-icon">+</span>
+                                    </button>
+                                    <div class="sop-section-content" id="subcontent-4-1" hidden>
+                                        <div class="sop-content">
+                                            <p>Untuk mengakses tools di atas, gunakan kredensial perusahaan Anda. Jika mengalami masalah login, hubungi IT Support.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="sop-section">
+                                    <button class="sop-section-header" aria-expanded="false" aria-controls="subcontent-4-2">
+                                        <span>Link Bantuan</span>
+                                        <span class="sop-toggle-icon">+</span>
+                                    </button>
+                                    <div class="sop-section-content" id="subcontent-4-2" hidden>
+                                        <div class="sop-content">
+                                            <div class="sop-link-item">
+                                                <a href="/helpdesk/it" class="sop-link">
+                                                    <span class="sop-link-title">IT Helpdesk</span>
+                                                    <span class="sop-link-icon" aria-hidden="true">→</span>
+                                                </a>
+                                            </div>
+                                            <div class="sop-link-item">
+                                                <a href="/wp-content/uploads/user-guide.pdf" target="_blank" class="sop-link">
+                                                    <span class="sop-link-title">User Guide PDF</span>
+                                                    <span class="sop-link-icon" aria-hidden="true">→</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Section -->
+                <div class="sop-section">
+                    <button class="sop-section-header" aria-expanded="false" aria-controls="content-5">
+                        <span>📞 Kontak & Support</span>
+                        <span class="sop-toggle-icon">+</span>
+                    </button>
+                    <div class="sop-section-content" id="content-5" hidden>
+                        <div class="sop-content">
+                            <div class="sop-link-item">
+                                <a href="/emergency-contacts" class="sop-link">
+                                    <span class="sop-link-title">Emergency Contact List</span>
+                                    <span class="sop-link-icon" aria-hidden="true">→</span>
+                                </a>
+                            </div>
+                            <div class="sop-link-item">
+                                <a href="/directory" class="sop-link">
+                                    <span class="sop-link-title">Department Directory</span>
+                                    <span class="sop-link-icon" aria-hidden="true">→</span>
+                                </a>
+                            </div>
+                            <div class="sop-link-item">
+                                <a href="/support/ticket" class="sop-link">
+                                    <span class="sop-link-title">Submit Support Ticket</span>
+                                    <span class="sop-link-icon" aria-hidden="true">→</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/sop-accordion.js"></script>
+    <script>
+        // Add event tracking for demo
+        document.addEventListener('DOMContentLoaded', function() {
+            const accordion = document.querySelector('.sop-json-viewer');
+            
+            accordion.addEventListener('sop:sectionOpened', function(e) {
+                console.log('Section opened:', e.detail.header.textContent.trim());
+            });
+            
+            accordion.addEventListener('sop:sectionClosed', function(e) {
+                console.log('Section closed:', e.detail.header.textContent.trim());
+            });
+            
+            // Track link clicks
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.sop-link')) {
+                    const link = e.target.closest('.sop-link');
+                    const title = link.querySelector('.sop-link-title').textContent;
+                    console.log('Link clicked:', title, link.href);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

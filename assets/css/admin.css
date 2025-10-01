@@ -1,0 +1,953 @@
+/**
+ * SOP JSON Viewer - Modern Admin Styles
+ */
+
+/* CSS Variables for consistent theming */
+:root {
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
+    --primary-light: #eff6ff;
+    --secondary-color: #64748b;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --error-color: #ef4444;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --transition-fast: 150ms ease;
+    --transition-normal: 200ms ease;
+}
+
+/* Main Admin Wrapper */
+.sjp-admin-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+}
+
+/* Admin Header */
+.sjp-admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding: 24px 32px;
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+}
+
+.sjp-admin-title h1 {
+    margin: 0 0 8px 0;
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sjp-admin-title h1::before {
+    content: '📋';
+    font-size: 1.5rem;
+}
+
+.sjp-admin-title p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.sjp-admin-actions {
+    display: flex;
+    gap: 12px;
+}
+
+/* Main Layout Grid */
+.sjp-admin-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    min-height: 600px;
+}
+
+/* Panel Styles */
+.sjp-editor-panel,
+.sjp-preview-panel {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.sjp-panel-header {
+    padding: 20px 24px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sjp-panel-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.sjp-panel-tabs {
+    display: flex;
+    gap: 8px;
+}
+
+.sjp-tab {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+}
+
+.sjp-tab:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.sjp-tab.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.sjp-panel-content {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+}
+
+.sjp-tab-content {
+    display: none;
+}
+
+.sjp-tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Form Styles */
+.sjp-form-grid {
+    margin-bottom: 24px;
+}
+
+.sjp-form-group {
+    margin-bottom: 20px;
+}
+
+.sjp-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+}
+
+.sjp-required {
+    color: var(--error-color);
+    margin-left: 4px;
+}
+
+.sjp-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.sjp-input {
+    width: 100%;
+    padding: 12px 16px 12px 44px !important;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    transition: all var(--transition-fast);
+    background: var(--bg-primary);
+}
+
+.sjp-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    outline: none;
+}
+
+.sjp-input-icon {
+    position: absolute;
+    left: 16px;
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+}
+
+.sjp-input-icon.dashicons {
+    font-size: 1.2rem;
+    line-height: 1;
+    font-family: 'dashicons', sans-serif;
+}
+
+/* Fallback for dashicons if not loaded */
+.sjp-input-icon.dashicons:before {
+    content: "📋";
+    font-family: sans-serif;
+}
+
+.sjp-help-text {
+    margin-top: 6px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+/* Editor Styles */
+.sjp-editor-container {
+    margin-bottom: 24px;
+}
+
+.sjp-editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.sjp-editor-tools {
+    display: flex;
+    gap: 8px;
+}
+
+.sjp-tool-btn {
+    padding: 8px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.sjp-tool-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.sjp-json-editor-wrapper {
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--bg-primary);
+    transition: all var(--transition-fast);
+}
+
+.sjp-json-editor-wrapper:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.sjp-json-textarea {
+    width: 100%;
+    min-height: 400px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border: none;
+    outline: none;
+    resize: vertical;
+    padding: 16px;
+}
+
+/* Button Styles */
+.sjp-form-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.sjp-btn {
+    padding: 12px 20px;
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.sjp-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.sjp-btn-primary {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.sjp-btn-primary:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.sjp-btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+.sjp-btn-secondary:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.sjp-btn-sm {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+}
+
+.sjp-btn-help {
+    background: transparent;
+    color: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+.sjp-btn-help:hover {
+    background: var(--bg-secondary);
+    color: var(--primary-color);
+}
+
+/* Validation Status */
+.sjp-validation-status {
+    margin: 20px 0;
+    padding: 16px 20px;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: 2px solid;
+    animation: slideIn 0.3s ease;
+}
+
+.sjp-validation-status.notice-success {
+    background: var(--primary-light);
+    border-color: var(--success-color);
+    color: var(--success-color);
+}
+
+.sjp-validation-status.notice-error {
+    background: #fef2f2;
+    border-color: var(--error-color);
+    color: var(--error-color);
+}
+
+.sjp-validation-status.notice-warning {
+    background: #fffbeb;
+    border-color: var(--warning-color);
+    color: var(--warning-color);
+}
+
+/* Preview Styles */
+.sjp-preview-tools {
+    display: flex;
+    gap: 8px;
+}
+
+.sjp-preview-content {
+    flex: 1;
+    padding: 0;
+    background: var(--bg-secondary);
+    overflow-y: auto;
+}
+
+.sjp-preview-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.sjp-preview-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.sjp-preview-placeholder h3 {
+    margin: 0 0 8px 0;
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.sjp-preview-placeholder p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+/* Template Styles */
+.sjp-template-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.sjp-template-card {
+    padding: 24px;
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.sjp-template-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.sjp-template-icon {
+    font-size: 2rem;
+    margin-bottom: 16px;
+}
+
+.sjp-template-card h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.sjp-template-card p {
+    margin: 0 0 16px 0;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+/* Modal Styles */
+.sjp-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 100000;
+    align-items: center;
+    justify-content: center;
+}
+
+.sjp-modal.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+.sjp-modal-content {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.sjp-modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sjp-modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.sjp-modal-close {
+    padding: 8px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.sjp-modal-close:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.sjp-modal-body {
+    padding: 24px;
+}
+
+.sjp-help-section {
+    margin-bottom: 24px;
+}
+
+.sjp-help-section:last-child {
+    margin-bottom: 0;
+}
+
+.sjp-help-section h4 {
+    margin: 0 0 12px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.sjp-help-section ol {
+    margin: 0;
+    padding-left: 20px;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+
+.sjp-help-section li {
+    margin-bottom: 6px;
+}
+
+.sjp-help-section pre {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    overflow-x: auto;
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .sjp-admin-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .sjp-admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sjp-admin-wrapper {
+        padding: 16px;
+    }
+    
+    .sjp-admin-header {
+        padding: 20px;
+    }
+    
+    .sjp-panel-header {
+        padding: 16px 20px;
+    }
+    
+    .sjp-panel-content {
+        padding: 20px;
+    }
+    
+    .sjp-form-actions {
+        flex-direction: column;
+    }
+    
+    .sjp-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .sjp-template-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animation for smooth transitions */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Loading state */
+.sjp-loading {
+    position: relative;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.sjp-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: sjp-spin 1s linear infinite;
+}
+
+@keyframes sjp-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Settings page styles */
+.sjp-settings-section {
+    background: #fff;
+    border: 2px solid #e1e1e1;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.sjp-settings-section h3 {
+    margin: 0;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #17a2b8, #138496);
+    color: white;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sjp-settings-section:nth-child(2) h3 {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.sjp-settings-section:nth-child(3) h3 {
+    background: linear-gradient(135deg, #ffc107, #fd7e14);
+}
+
+.sjp-settings-content {
+    padding: 24px;
+}
+
+.sjp-setting-field {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+}
+
+.sjp-setting-field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 12px;
+    font-size: 15px;
+    color: #23282d;
+}
+
+.sjp-setting-field input[type="text"],
+.sjp-setting-field input[type="url"],
+.sjp-setting-field input[type="number"],
+.sjp-setting-field select,
+.sjp-setting-field textarea {
+    width: 100%;
+    max-width: 500px;
+    padding: 12px 16px;
+    border: 2px solid #e1e1e1;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: #fff;
+}
+
+.sjp-setting-field input:focus,
+.sjp-setting-field select:focus,
+.sjp-setting-field textarea:focus {
+    border-color: #007cba;
+    box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.1);
+    outline: none;
+}
+
+.sjp-setting-field textarea {
+    min-height: 120px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+/* Enhanced Settings Page Styles */
+.sjp-settings-intro {
+    background: linear-gradient(135deg, #e7f3ff, #d1e7dd);
+    border: 1px solid #b8daff;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-size: 15px;
+    color: #004085;
+    border-left: 4px solid #007cba;
+}
+
+.sjp-settings-container {
+    margin-bottom: 32px;
+}
+
+.sjp-settings-form {
+    background: #f8f9fa;
+    padding: 24px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.sjp-setting-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 14px;
+    border: 2px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: #fff;
+}
+
+.sjp-setting-input:focus {
+    border-color: #007cba;
+    box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.15);
+    outline: none;
+}
+
+.sjp-checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.sjp-setting-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: #007cba;
+    cursor: pointer;
+}
+
+.sjp-checkbox-label {
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+}
+
+.sjp-settings-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    margin-top: 24px;
+}
+
+.sjp-btn-large {
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.sjp-setting-description {
+    color: #666;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sjp-admin-container {
+        margin: 10px;
+    }
+
+    .sjp-form-section h3,
+    .sjp-settings-section h3 {
+        padding: 16px 20px;
+        font-size: 15px;
+    }
+
+    .sjp-form-content,
+    .sjp-settings-content {
+        padding: 16px;
+    }
+
+    .sjp-button-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .sjp-btn {
+        text-align: center;
+        justify-content: center;
+        padding: 14px 20px;
+    }
+
+    .sjp-sop-id-input {
+        min-width: auto;
+        width: 100%;
+    }
+
+    .sjp-setting-field {
+        padding: 12px;
+        margin-bottom: 16px;
+    }
+
+    .sjp-setting-field input,
+    .sjp-setting-field select,
+    .sjp-setting-field textarea {
+        max-width: 100%;
+    }
+
+    .sjp-preview-container {
+        padding: 16px;
+    }
+
+    .sjp-controls {
+        padding: 16px;
+    }
+
+    .sjp-settings-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        padding: 16px;
+    }
+
+    .sjp-settings-form {
+        padding: 16px;
+    }
+
+    .sjp-settings-intro {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sjp-json-textarea {
+        min-height: 400px;
+        font-size: 13px;
+    }
+
+    .sjp-btn {
+        padding: 12px 16px;
+        font-size: 13px;
+    }
+}
+
+/* Animation for smooth transitions */
+.sjp-form-section,
+.sjp-settings-section,
+.sjp-preview-container {
+    animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Loading state */
+.sjp-loading {
+    position: relative;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.sjp-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #007cba;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: sjp-spin 1s linear infinite;
+}
+
+@keyframes sjp-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

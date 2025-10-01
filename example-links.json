@@ -1,0 +1,121 @@
+{
+  "title": "SOP dengan Link Content",
+  "description": "Contoh SOP yang menampilkan berbagai jenis content termasuk link list dengan sorting",
+  "sections": [
+    {
+      "title": "📚 Referensi & Dokumentasi",
+      "sort": true,
+      "sort_by": "title",
+      "sort_order": "asc",
+      "content": [
+        {
+          "type": "link",
+          "title": "Form Laporan Insiden",
+          "url": "/forms/incident-report"
+        },
+        {
+          "type": "link",
+          "title": "Manual Panduan Operasional",
+          "url": "https://example.com/manual-operasional",
+          "target": "_blank"
+        },
+        {
+          "type": "link",
+          "title": "Safety Guidelines PDF",
+          "url": "/wp-content/uploads/safety-guidelines.pdf",
+          "target": "_blank"
+        }
+      ]
+    },
+    {
+      "title": "🔗 Link Ekstern Penting",
+      "content": [
+        {
+          "type": "link",
+          "title": "Website Resmi Perusahaan",
+          "url": "https://company-website.com",
+          "target": "_blank"
+        },
+        {
+          "type": "link",
+          "title": "Portal Karyawan",
+          "url": "https://portal.company.com",
+          "target": "_blank"
+        },
+        {
+          "type": "link",
+          "title": "Sistem Training Online",
+          "url": "https://training.company.com",
+          "target": "_blank"
+        }
+      ]
+    },
+    {
+      "title": "📋 Prosedur Standar",
+      "content": "<p>Berikut adalah prosedur standar yang harus diikuti:</p><ol><li>Persiapan awal dan checklist peralatan</li><li>Eksekusi prosedur sesuai langkah-langkah</li><li>Quality control dan dokumentasi</li><li>Cleanup dan reporting</li></ol>"
+    },
+    {
+      "title": "🛠️ Tools & Software",
+      "content": [
+        {
+          "type": "link",
+          "title": "Project Management Tool",
+          "url": "https://pm-tool.company.com",
+          "target": "_blank"
+        },
+        {
+          "type": "link",
+          "title": "Time Tracking System",
+          "url": "/time-tracking"
+        },
+        {
+          "type": "link",
+          "title": "Document Repository",
+          "url": "/documents"
+        }
+      ],
+      "subsections": [
+        {
+          "title": "Akses & Login",
+          "content": "<p>Untuk mengakses tools di atas, gunakan kredensial perusahaan Anda. Jika mengalami masalah login, hubungi IT Support.</p>"
+        },
+        {
+          "title": "Link Bantuan",
+          "content": [
+            {
+              "type": "link",
+              "title": "IT Helpdesk",
+              "url": "/helpdesk/it"
+            },
+            {
+              "type": "link",
+              "title": "User Guide PDF",
+              "url": "/wp-content/uploads/user-guide.pdf",
+              "target": "_blank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "📞 Kontak & Support",
+      "content": [
+        {
+          "type": "link",
+          "title": "Emergency Contact List",
+          "url": "/emergency-contacts"
+        },
+        {
+          "type": "link",
+          "title": "Department Directory",
+          "url": "/directory"
+        },
+        {
+          "type": "link",
+          "title": "Submit Support Ticket",
+          "url": "/support/ticket"
+        }
+      ]
+    }
+  ]
+}
