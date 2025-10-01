@@ -40,11 +40,11 @@ echo "📁 Creating main plugin file..."
 MAIN_PLUGIN_CONTENT="<?php
 /**
  * Plugin Name: SOP JSON Viewer
- * Plugin URI: https://yoursite.com/sop-json-viewer
+ * Plugin URI: mailto:hrudy715@gmail.com/sop-json-viewer
  * Description: Plugin WordPress untuk menampilkan konten SOP dalam format accordion interaktif menggunakan data JSON dengan editor validasi real-time
  * Version: 1.0.0
  * Author: Rudy Hermawan
- * Author URI: https://yoursite.com
+ * Author URI: mailto:hrudy715@gmail.com
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: sop-json-viewer

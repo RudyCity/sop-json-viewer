@@ -951,3 +951,38 @@
         transform: rotate(360deg);
     }
 }
+
+/* Credits Section Styles */
+.sjp-admin-credits {
+    margin-top: 32px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.sjp-credits-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sjp-credits-text {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.sjp-credits-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 4px;
+    transition: color var(--transition-fast);
+}
+
+.sjp-credits-link:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}

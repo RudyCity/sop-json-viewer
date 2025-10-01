@@ -231,6 +231,16 @@ class SOP_JSON_Viewer_Admin {
                     </div>
                 </div>
             </div>
+            
+            <!-- Credits Section -->
+            <div class="sjp-admin-credits">
+                <div class="sjp-credits-content">
+                    <p class="sjp-credits-text">
+                        <?php _e('Plugin developed by:', 'sop-json-viewer'); ?>
+                        <a href="mailto:hrudy715@gmail.com" class="sjp-credits-link">Rudy Hermawan (hrudy715@gmail.com)</a>
+                    </p>
+                </div>
+            </div>
         </div>
         <?php
     }
