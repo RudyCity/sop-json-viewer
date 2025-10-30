@@ -26,11 +26,8 @@ class SOP_JSON_Viewer {
         // Register shortcode
         add_shortcode('sop-accordion', array($this, 'render_sop_accordion'));
 
-        // AJAX handlers untuk admin
-        add_action('wp_ajax_sjp_save_sop_data', array($this, 'ajax_save_sop_data'));
-        add_action('wp_ajax_sjp_load_sop_data', array($this, 'ajax_load_sop_data'));
-        add_action('wp_ajax_sjp_validate_json', array($this, 'ajax_validate_json'));
-        add_action('wp_ajax_sjp_delete_sop_data', array($this, 'ajax_delete_sop_data'));
+        // AJAX handlers untuk admin - unified handler
+        add_action('wp_ajax_sjp_sop_operations', array($this, 'ajax_sop_operations'));
 
         // Initialize admin interface
         $this->admin = new SOP_JSON_Viewer_Admin($this);
@@ -404,19 +401,51 @@ class SOP_JSON_Viewer {
         return $default_data;
     }
 
-    public function ajax_save_sop_data() {
+    public function ajax_sop_operations() {
         // Check nonce untuk security
         if (!wp_verify_nonce($_POST['nonce'], 'sjp_nonce')) {
-            error_log('[SOP JSON Viewer] Save failed: Security check failed for SOP data save attempt');
+            error_log('[SOP JSON Viewer] Operation failed: Security check failed');
             wp_send_json_error('Security check failed');
+            return;
         }
 
         // Check user capability
         if (!current_user_can('manage_options')) {
-            error_log('[SOP JSON Viewer] Save failed: Insufficient permissions for user ' . get_current_user_id());
+            error_log('[SOP JSON Viewer] Operation failed: Insufficient permissions for user ' . get_current_user_id());
             wp_send_json_error('Insufficient permissions');
+            return;
         }
 
+        $operation = sanitize_text_field($_POST['operation'] ?? '');
+
+        switch ($operation) {
+            case 'save':
+                $this->handle_save_operation();
+                break;
+
+            case 'load':
+                $this->handle_load_operation();
+                break;
+
+            case 'validate':
+                $this->handle_validate_operation();
+                break;
+
+            case 'delete':
+                $this->handle_delete_operation();
+                break;
+
+            case 'get_saved_sops':
+                $this->handle_get_saved_sops_operation();
+                break;
+
+            default:
+                wp_send_json_error('Invalid operation specified');
+                break;
+        }
+    }
+
+    private function handle_save_operation() {
         $sop_id = sanitize_text_field($_POST['sop_id']);
         $sop_data = wp_unslash($_POST['sop_data']);
 
@@ -440,6 +469,7 @@ class SOP_JSON_Viewer {
             );
             error_log('[SOP JSON Viewer] ' . $error_msg);
             wp_send_json_error('Invalid JSON format: ' . json_last_error_msg());
+            return;
         }
 
         // Sanitize data sebelum save
@@ -453,6 +483,13 @@ class SOP_JSON_Viewer {
             $sanitized_sections,
             isset($sanitized_data['title']) ? $sanitized_data['title'] : 'No title'
         ));
+
+        // Ensure we have valid data to save
+        if (empty($sanitized_data) || !isset($sanitized_data['title'])) {
+            error_log('[SOP JSON Viewer] Save failed: Sanitized data is empty or missing title');
+            wp_send_json_error('Failed to save SOP data: Invalid data structure');
+            return;
+        }
 
         // Save ke database
         $result = update_option('sjp_sop_data_' . $sop_id, $sanitized_data);
@@ -500,15 +537,7 @@ class SOP_JSON_Viewer {
         }
     }
 
-    public function ajax_load_sop_data() {
-        if (!wp_verify_nonce($_POST['nonce'], 'sjp_nonce')) {
-            wp_send_json_error('Security check failed');
-        }
-
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error('Insufficient permissions');
-        }
-
+    private function handle_load_operation() {
         $sop_id = sanitize_text_field($_POST['sop_id']);
         $sop_data = get_option('sjp_sop_data_' . $sop_id, array());
 
@@ -519,27 +548,19 @@ class SOP_JSON_Viewer {
         }
     }
 
-    public function ajax_validate_json() {
-        // Check nonce untuk security
-        if (!wp_verify_nonce($_POST['nonce'], 'sjp_nonce')) {
-            wp_send_json_error('Security check failed');
-        }
-
-        // Check user capability
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error('Insufficient permissions');
-        }
-
+    private function handle_validate_operation() {
         $json_data = wp_unslash($_POST['json_data']);
 
         if (empty($json_data)) {
             wp_send_json_error('JSON data is empty');
+            return;
         }
 
         // Basic JSON syntax check
         $decoded_data = json_decode($json_data);
         if (json_last_error() !== JSON_ERROR_NONE) {
             wp_send_json_error('JSON Syntax Error: ' . json_last_error_msg());
+            return;
         }
 
         // Use the validator class for structure validation
@@ -561,23 +582,12 @@ class SOP_JSON_Viewer {
         }
     }
 
-    public function ajax_delete_sop_data() {
-        // Check nonce untuk security
-        if (!wp_verify_nonce($_POST['nonce'], 'sjp_nonce')) {
-            error_log('[SOP JSON Viewer] Delete failed: Security check failed for SOP data delete attempt');
-            wp_send_json_error('Security check failed');
-        }
-
-        // Check user capability
-        if (!current_user_can('manage_options')) {
-            error_log('[SOP JSON Viewer] Delete failed: Insufficient permissions for user ' . get_current_user_id());
-            wp_send_json_error('Insufficient permissions');
-        }
-
+    private function handle_delete_operation() {
         $sop_id = sanitize_text_field($_POST['sop_id']);
 
         if (empty($sop_id)) {
             wp_send_json_error('SOP ID is required');
+            return;
         }
 
         // Log delete attempt
@@ -611,9 +621,17 @@ class SOP_JSON_Viewer {
         }
     }
 
+    private function handle_get_saved_sops_operation() {
+        // Get saved SOPs using admin interface method
+        $saved_sops = $this->admin->get_saved_sops();
+
+        wp_send_json_success($saved_sops);
+    }
+
     private function sanitize_sop_data($data) {
         $sanitized = array();
 
+        // Sanitize known fields
         if (isset($data['title'])) {
             $sanitized['title'] = sanitize_text_field($data['title']);
         }
@@ -629,12 +647,30 @@ class SOP_JSON_Viewer {
             }
         }
 
+        // Preserve additional custom keys that are not known fields
+        foreach ($data as $key => $value) {
+            if (!in_array($key, array('title', 'description', 'sections'))) {
+                // For custom keys, sanitize based on type
+                if (is_string($value)) {
+                    $sanitized[$key] = sanitize_text_field($value);
+                } elseif (is_array($value)) {
+                    // For arrays, recursively sanitize
+                    $sanitized[$key] = $this->sanitize_array_data($value);
+                } elseif (is_bool($value) || is_int($value) || is_float($value)) {
+                    // Keep primitive types as-is
+                    $sanitized[$key] = $value;
+                }
+                // Skip objects and other complex types for security
+            }
+        }
+
         return $sanitized;
     }
 
     private function sanitize_section_data($section) {
         $sanitized = array();
 
+        // Sanitize known fields
         if (isset($section['title'])) {
             $sanitized['title'] = sanitize_text_field($section['title']);
         }
@@ -656,6 +692,23 @@ class SOP_JSON_Viewer {
             $sanitized['subsections'] = array();
             foreach ($section['subsections'] as $subsection) {
                 $sanitized['subsections'][] = $this->sanitize_section_data($subsection);
+            }
+        }
+
+        // Preserve additional custom keys in sections
+        foreach ($section as $key => $value) {
+            if (!in_array($key, array('title', 'content', 'subsections'))) {
+                // For custom keys, sanitize based on type
+                if (is_string($value)) {
+                    $sanitized[$key] = sanitize_text_field($value);
+                } elseif (is_array($value)) {
+                    // For arrays, recursively sanitize
+                    $sanitized[$key] = $this->sanitize_array_data($value);
+                } elseif (is_bool($value) || is_int($value) || is_float($value)) {
+                    // Keep primitive types as-is
+                    $sanitized[$key] = $value;
+                }
+                // Skip objects and other complex types for security
             }
         }
 
@@ -705,6 +758,28 @@ class SOP_JSON_Viewer {
                     }
                 }
                 break;
+        }
+
+        return $sanitized;
+    }
+
+    private function sanitize_array_data($data) {
+        if (!is_array($data)) {
+            return array();
+        }
+
+        $sanitized = array();
+        foreach ($data as $key => $value) {
+            if (is_string($value)) {
+                $sanitized[$key] = sanitize_text_field($value);
+            } elseif (is_array($value)) {
+                // Recursively sanitize nested arrays
+                $sanitized[$key] = $this->sanitize_array_data($value);
+            } elseif (is_bool($value) || is_int($value) || is_float($value)) {
+                // Keep primitive types as-is
+                $sanitized[$key] = $value;
+            }
+            // Skip objects and other complex types for security
         }
 
         return $sanitized;

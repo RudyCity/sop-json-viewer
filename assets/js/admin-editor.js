@@ -499,10 +499,8 @@ class SOPJSONEditor {
         }).then((response) => {
             if (response.success) {
                 this.showValidationStatus('success', `✅ SOP "${sopId}" deleted successfully`);
-                // Refresh page to update the table
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
+                // Refresh the saved SOPs table instead of reloading the page
+                this.refreshSavedSopsTable();
             } else {
                 this.showValidationStatus('error', `❌ ${response.data}`);
             }
@@ -662,6 +660,24 @@ class SOPJSONEditor {
     }
 
     makeAjaxRequest(url, data) {
+        // Add operation parameter for unified handler
+        if (!data.operation) {
+            // Map old action names to operations for backward compatibility
+            if (data.action === 'sjp_save_sop_data') {
+                data.operation = 'save';
+            } else if (data.action === 'sjp_load_sop_data') {
+                data.operation = 'load';
+            } else if (data.action === 'sjp_validate_json') {
+                data.operation = 'validate';
+            } else if (data.action === 'sjp_delete_sop_data') {
+                data.operation = 'delete';
+            } else if (data.action === 'sjp_get_saved_sops') {
+                data.operation = 'get_saved_sops';
+            }
+            // Change action to unified handler
+            data.action = 'sjp_sop_operations';
+        }
+
         return fetch(url, {
             method: 'POST',
             headers: {
@@ -698,6 +714,8 @@ class SOPJSONEditor {
         }).then((response) => {
             if (response.success) {
                 this.showValidationStatus('success', '✅ Data saved successfully');
+                // Refresh the saved SOPs table after successful save
+                this.refreshSavedSopsTable();
             } else {
                 this.showValidationStatus('error', `❌ ${response.data}`);
             }
@@ -847,35 +865,41 @@ class SOPJSONEditor {
         let html = '';
         sections.forEach((section, index) => {
             const sectionId = `preview-section-${index}`;
-            
+
+            // Check for per-section expanded property
+            const isExpanded = section.expanded === true;
+            const expandedAttr = isExpanded ? 'true' : 'false';
+            const hiddenAttr = isExpanded ? '' : 'hidden';
+            const toggleIcon = isExpanded ? '−' : '+';
+
             html += `<div class="sop-section">`;
             html += `<button class="sop-section-header"
                               id="header-${sectionId}"
                               aria-controls="content-${sectionId}"
-                              aria-expanded="false"
+                              aria-expanded="${expandedAttr}"
                               role="tab"
                               type="button">
                 <span>${this.escapeHtml(section.title)}</span>
-                <span class="sop-toggle-icon" aria-hidden="true">+</span>
+                <span class="sop-toggle-icon" aria-hidden="true">${toggleIcon}</span>
             </button>`;
-            
+
             html += `<div class="sop-section-content"
                              id="content-${sectionId}"
                              aria-labelledby="header-${sectionId}"
                              role="tabpanel"
-                             aria-expanded="false"
-                             hidden>`;
-            
+                             aria-expanded="${expandedAttr}"
+                             ${hiddenAttr}>`;
+
             if (section.content) {
                 html += `<div class="sop-content">${this.processContent(section.content)}</div>`;
             }
-            
+
             if (section.subsections && section.subsections.length > 0) {
                 html += '<div class="sop-subsections">';
                 html += this.renderSectionsForPreview(section.subsections);
                 html += '</div>';
             }
-            
+
             html += '</div></div>';
         });
         return html;
@@ -972,6 +996,97 @@ class SOPJSONEditor {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    refreshSavedSopsTable() {
+        // Make AJAX request to get updated SOPs list
+        this.makeAjaxRequest(sjp_ajax.ajax_url, {
+            action: 'sjp_get_saved_sops',
+            nonce: sjp_ajax.nonce
+        }).then((response) => {
+            if (response.success && response.data) {
+                this.updateSavedSopsTable(response.data);
+            }
+        }).catch(() => {
+            // If AJAX fails, reload the page as fallback
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        });
+    }
+
+    updateSavedSopsTable(savedSops) {
+        const tableBody = document.querySelector('.sjp-saved-sops-table tbody');
+        const panelHeader = document.querySelector('.sjp-saved-sops-section .sjp-panel-header');
+
+        if (!tableBody || !panelHeader) return;
+
+        // Update count in header
+        const countSpan = panelHeader.querySelector('.sjp-sop-count');
+        if (countSpan) {
+            const sopCount = Object.keys(savedSops).length;
+            countSpan.textContent = `${sopCount} SOP${sopCount !== 1 ? 's' : ''} saved`;
+        }
+
+        // Generate new table rows
+        let rowsHtml = '';
+
+        if (Object.keys(savedSops).length > 0) {
+            Object.entries(savedSops).forEach(([sopId, sopData]) => {
+                const sectionCount = sopData.sections ? sopData.sections.length : 0;
+                const modifiedTime = this.getModifiedTime(sopId);
+
+                rowsHtml += `
+                    <tr>
+                        <td class="sjp-sop-id">
+                            <code>${this.escapeHtml(sopId)}</code>
+                        </td>
+                        <td class="sjp-sop-title">
+                            ${this.escapeHtml(sopData.title || 'Untitled SOP')}
+                        </td>
+                        <td class="sjp-sop-sections">
+                            ${sectionCount} section${sectionCount !== 1 ? 's' : ''}
+                        </td>
+                        <td class="sjp-sop-modified">
+                            ${modifiedTime}
+                        </td>
+                        <td class="sjp-sop-actions">
+                            <button type="button" class="sjp-btn sjp-btn-sm sjp-btn-secondary sjp-load-sop"
+                                    data-sop-id="${this.escapeHtml(sopId)}"
+                                    title="Load this SOP for editing">
+                                <span class="dashicons dashicons-edit"></span>
+                                Edit
+                            </button>
+                            <button type="button" class="sjp-btn sjp-btn-sm sjp-btn-danger sjp-delete-sop"
+                                    data-sop-id="${this.escapeHtml(sopId)}"
+                                    title="Delete this SOP">
+                                <span class="dashicons dashicons-trash"></span>
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        } else {
+            rowsHtml = `
+                <tr>
+                    <td colspan="5" class="sjp-no-sops">
+                        <div class="sjp-no-sops-message">
+                            <span class="dashicons dashicons-info-outline"></span>
+                            <p>No SOPs saved yet. Create your first SOP using the editor below.</p>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+
+        tableBody.innerHTML = rowsHtml;
+    }
+
+    getModifiedTime(sopId) {
+        // This is a simplified version - in a real implementation,
+        // you'd need to fetch this from the server or store it locally
+        return 'Just now';
     }
 }
 

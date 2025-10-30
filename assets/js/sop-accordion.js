@@ -359,23 +359,29 @@ class SOPAccordion {
     loadNestedData() {
         // Handle nested sections within the same accordion instance
         const nestedHeaders = this.element.querySelectorAll('.sop-subsections .sop-section-header');
-        
+
         if (nestedHeaders.length > 0) {
             nestedHeaders.forEach((header, index) => {
                 const section = header.closest('.sop-section');
                 const content = section.querySelector('.sop-section-content');
                 const baseId = `nested-${this.sopId}-${index}`;
-                
+
                 header.setAttribute('id', `sop-header-${baseId}`);
                 header.setAttribute('aria-controls', `sop-content-${baseId}`);
-                header.setAttribute('aria-expanded', 'false');
+                // Only set aria-expanded to 'false' if not already set (preserve per-section settings)
+                if (!header.hasAttribute('aria-expanded')) {
+                    header.setAttribute('aria-expanded', 'false');
+                }
                 header.setAttribute('role', 'button');
                 header.setAttribute('tabindex', '-1');
-                
+
                 if (content) {
                     content.setAttribute('id', `sop-content-${baseId}`);
                     content.setAttribute('aria-labelledby', `sop-header-${baseId}`);
-                    content.setAttribute('hidden', 'hidden');
+                    // Only set hidden if not already set (preserve per-section settings)
+                    if (!content.hasAttribute('aria-expanded')) {
+                        content.setAttribute('hidden', 'hidden');
+                    }
                 }
             });
         }
@@ -565,7 +571,41 @@ class SOPAccordion {
     handleInitialVisibility() {
         const defaultVisibility = this.element.dataset.defaultVisibility || 'hidden';
 
-        if (defaultVisibility === 'shown') {
+        // Handle sections that are already marked as expanded in HTML (from PHP rendering)
+        const expandedHeaders = this.element.querySelectorAll('.sop-section-header[aria-expanded="true"]');
+
+        expandedHeaders.forEach(header => {
+            const section = header.closest('.sop-section');
+            const content = section.querySelector('.sop-section-content');
+
+            if (content) {
+                // Set the currently open section (only for main sections, not nested)
+                if (!header.closest('.sop-subsections')) {
+                    this.currentlyOpen = { header, content };
+                }
+
+                // Apply expanded styles immediately
+                content.style.maxHeight = 'none';
+                content.style.overflow = 'visible';
+                content.style.opacity = '1';
+                content.style.padding = '0 24px 20px';
+                content.removeAttribute('hidden');
+                content.setAttribute('aria-expanded', 'true');
+
+                // Update header state
+                header.setAttribute('aria-expanded', 'true');
+                const toggleIcon = header.querySelector('.sop-toggle-icon');
+                if (toggleIcon) {
+                    toggleIcon.textContent = '−';
+                }
+
+                // Manage nested focus
+                this.manageNestedFocus(content, true);
+            }
+        });
+
+        // Fallback for default visibility if no sections are pre-expanded
+        if (defaultVisibility === 'shown' && expandedHeaders.length === 0) {
             // Find the first section that should be expanded
             const firstHeader = this.element.querySelector('.sop-accordion > .sop-section > .sop-section-header');
             const firstContent = this.element.querySelector('.sop-accordion > .sop-section > .sop-section-content');
