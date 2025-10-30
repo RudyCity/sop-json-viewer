@@ -1088,6 +1088,28 @@
     animation: sjp-spin 1s linear infinite;
 }
 
+/* Validation status loading */
+.sjp-status-loading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sjp-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 50%;
+    border-top-color: #007cba;
+    animation: sjp-spin 1s linear infinite;
+    flex-shrink: 0;
+}
+
+.sjp-validation-status.sjp-loading {
+    opacity: 1;
+    pointer-events: auto;
+}
+
 @keyframes sjp-spin {
     to {
         transform: rotate(360deg);

@@ -446,8 +446,8 @@ class SOPJSONEditor {
         this.editor.codemirror.setValue('');
         this.clearPreview();
 
-        // Show loading state
-        this.showValidationStatus('warning', `Loading SOP: ${sopId}...`);
+        // Show loading state with spinner
+        this.showValidationStatus('warning', `Loading SOP: ${sopId}...`, true);
 
         // Disable form inputs during loading
         this.setFormDisabled(true);
@@ -482,8 +482,8 @@ class SOPJSONEditor {
             return;
         }
 
-        // Show loading state
-        this.showValidationStatus('warning', `Deleting SOP: ${sopId}...`);
+        // Show loading state with spinner
+        this.showValidationStatus('warning', `Deleting SOP: ${sopId}...`, true);
 
         this.makeAjaxRequest(sjp_ajax.ajax_url, {
             action: 'sjp_delete_sop_data',
@@ -610,11 +610,32 @@ class SOPJSONEditor {
         }
     }
 
-    showValidationStatus(type, message) {
+    showValidationStatus(type, message, isLoading = false) {
         const statusElement = document.getElementById('sjp-validation-status');
         if (statusElement) {
-            statusElement.className = `sjp-validation-status notice-${type}`;
-            statusElement.innerHTML = `<p>${message}</p>`;
+            let classes = `sjp-validation-status notice-${type}`;
+            if (isLoading) {
+                classes += ' sjp-loading';
+            }
+
+            statusElement.className = classes;
+
+            let content = '';
+            if (isLoading) {
+                content = `
+                    <div class="sjp-status-loading">
+                        <div class="sjp-spinner"></div>
+                        <span>${message || 'Loading...'}</span>
+                    </div>
+                `;
+            } else if (message && message.trim()) {
+                content = `<p>${message}</p>`;
+            } else {
+                // Default message if empty
+                content = `<p>Ready to validate JSON</p>`;
+            }
+
+            statusElement.innerHTML = content;
         }
     }
 
@@ -700,8 +721,8 @@ class SOPJSONEditor {
         this.editor.codemirror.setValue('');
         this.clearPreview();
 
-        // Show loading state
-        this.showValidationStatus('warning', 'Loading existing data...');
+        // Show loading state with spinner
+        this.showValidationStatus('warning', 'Loading existing data...', true);
 
         // Disable form inputs during loading
         this.setFormDisabled(true);
