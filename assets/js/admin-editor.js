@@ -285,9 +285,13 @@ class SOPJSONEditor {
         // SOP ID change
         const sopIdInput = document.getElementById('sop_id');
         if (sopIdInput) {
-            sopIdInput.addEventListener('change', () => {
-                this.currentSopId = sopIdInput.value;
-                this.loadExistingData();
+            sopIdInput.addEventListener('change', (e) => {
+                const newSopId = e.target.value.trim();
+                // Only load if SOP ID actually changed
+                if (newSopId && newSopId !== this.currentSopId) {
+                    this.currentSopId = newSopId;
+                    this.loadExistingData();
+                }
             });
         }
 
@@ -424,7 +428,10 @@ class SOPJSONEditor {
     }
 
     loadSopById(sopId) {
-        if (!this.editor || this.isLoading) return;
+        if (!this.editor) return;
+
+        // Prevent loading if already loading this SOP
+        if (this.isLoading && this.currentSopId === sopId) return;
 
         // Prevent multiple simultaneous loads
         this.isLoading = true;
@@ -435,12 +442,12 @@ class SOPJSONEditor {
             this.validationTimer = null;
         }
 
-        // Update SOP ID input
+        // Update SOP ID input and current tracking
         const sopIdInput = document.getElementById('sop_id');
         if (sopIdInput) {
             sopIdInput.value = sopId;
-            this.currentSopId = sopId;
         }
+        this.currentSopId = sopId;
 
         // Clear editor first
         this.editor.codemirror.setValue('');
@@ -698,15 +705,18 @@ class SOPJSONEditor {
     }
 
     loadExistingData() {
-        if (!this.editor || this.isLoading) return;
+        if (!this.editor) return;
 
         const sopIdInput = document.getElementById('sop_id');
         if (!sopIdInput) return;
 
-        const sopId = sopIdInput.value;
+        const sopId = sopIdInput.value.trim();
 
-        // Prevent loading if SOP ID is empty or same as current
-        if (!sopId.trim() || sopId === this.currentSopId) return;
+        // Prevent loading if SOP ID is empty
+        if (!sopId) return;
+
+        // Prevent loading if already loading this SOP
+        if (this.isLoading && this.currentSopId === sopId) return;
 
         // Prevent multiple simultaneous loads
         this.isLoading = true;
