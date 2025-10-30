@@ -301,6 +301,9 @@ class SOPJSONEditor {
 
         // Help modal
         this.bindHelpEvents();
+
+        // Saved SOPs table events
+        this.bindSavedSopsEvents();
     }
 
     bindButtonEvents() {
@@ -391,6 +394,89 @@ class SOPJSONEditor {
                 }
             });
         }
+    }
+
+    bindSavedSopsEvents() {
+        // Edit SOP button
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('sjp-load-sop') || e.target.closest('.sjp-load-sop')) {
+                e.preventDefault();
+                const button = e.target.classList.contains('sjp-load-sop') ? e.target : e.target.closest('.sjp-load-sop');
+                const sopId = button.getAttribute('data-sop-id');
+                if (sopId) {
+                    this.loadSopById(sopId);
+                }
+            }
+        });
+
+        // Delete SOP button
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('sjp-delete-sop') || e.target.closest('.sjp-delete-sop')) {
+                e.preventDefault();
+                const button = e.target.classList.contains('sjp-delete-sop') ? e.target : e.target.closest('.sjp-delete-sop');
+                const sopId = button.getAttribute('data-sop-id');
+                if (sopId) {
+                    this.deleteSopById(sopId);
+                }
+            }
+        });
+    }
+
+    loadSopById(sopId) {
+        if (!this.editor) return;
+
+        // Update SOP ID input
+        const sopIdInput = document.getElementById('sop_id');
+        if (sopIdInput) {
+            sopIdInput.value = sopId;
+            this.currentSopId = sopId;
+        }
+
+        // Show loading state
+        this.showValidationStatus('warning', `Loading SOP: ${sopId}...`);
+
+        this.makeAjaxRequest(sjp_ajax.ajax_url, {
+            action: 'sjp_load_sop_data',
+            nonce: sjp_ajax.nonce,
+            sop_id: sopId
+        }).then((response) => {
+            if (response.success && response.data) {
+                this.editor.codemirror.setValue(JSON.stringify(response.data, null, 2));
+                this.validateJSON();
+                this.showValidationStatus('success', `✅ SOP "${sopId}" loaded successfully`);
+            } else {
+                this.showValidationStatus('error', `❌ SOP "${sopId}" not found`);
+            }
+        }).catch(() => {
+            this.showValidationStatus('error', `❌ Error loading SOP "${sopId}"`);
+        });
+    }
+
+    deleteSopById(sopId) {
+        if (!confirm(`Are you sure you want to delete SOP "${sopId}"? This action cannot be undone.`)) {
+            return;
+        }
+
+        // Show loading state
+        this.showValidationStatus('warning', `Deleting SOP: ${sopId}...`);
+
+        this.makeAjaxRequest(sjp_ajax.ajax_url, {
+            action: 'sjp_delete_sop_data',
+            nonce: sjp_ajax.nonce,
+            sop_id: sopId
+        }).then((response) => {
+            if (response.success) {
+                this.showValidationStatus('success', `✅ SOP "${sopId}" deleted successfully`);
+                // Refresh page to update the table
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                this.showValidationStatus('error', `❌ ${response.data}`);
+            }
+        }).catch(() => {
+            this.showValidationStatus('error', `❌ Error deleting SOP "${sopId}"`);
+        });
     }
 
     switchTab(tabName) {
