@@ -1,3 +1,145 @@
+/* Saved SOPs Table Styles */
+.sjp-saved-sops-section {
+    margin-bottom: 30px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.sjp-saved-sops-section .sjp-panel-header {
+    background: #f8f9fa;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 16px 20px;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sjp-saved-sops-section .sjp-panel-header h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.sjp-sop-count {
+    background: #e5e7eb;
+    color: #6b7280;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.sjp-saved-sops-table-wrapper {
+    overflow-x: auto;
+}
+
+.sjp-saved-sops-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.sjp-saved-sops-table thead th {
+    background: #f9fafb;
+    color: #6b7280;
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 2px solid #e5e7eb;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.sjp-saved-sops-table tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+}
+
+.sjp-saved-sops-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+.sjp-sop-id code {
+    background: #f3f4f6;
+    color: #374151;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.8rem;
+}
+
+.sjp-sop-title {
+    font-weight: 500;
+    color: #1f2937;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sjp-sop-sections {
+    color: #6b7280;
+    font-size: 0.85rem;
+}
+
+.sjp-sop-modified {
+    color: #6b7280;
+    font-size: 0.85rem;
+}
+
+.sjp-sop-actions {
+    white-space: nowrap;
+}
+
+.sjp-sop-actions .sjp-btn {
+    margin-right: 8px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+}
+
+.sjp-sop-actions .sjp-btn:last-child {
+    margin-right: 0;
+}
+
+.sjp-btn-danger {
+    background: #dc2626;
+    color: #fff;
+    border-color: #dc2626;
+}
+
+.sjp-btn-danger:hover {
+    background: #b91c1c;
+    border-color: #b91c1c;
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+    .sjp-saved-sops-table {
+        font-size: 0.8rem;
+    }
+
+    .sjp-saved-sops-table thead th,
+    .sjp-saved-sops-table tbody td {
+        padding: 8px 12px;
+    }
+
+    .sjp-sop-title {
+        max-width: 150px;
+    }
+
+    .sjp-sop-actions .sjp-btn {
+        padding: 4px 8px;
+        font-size: 0.75rem;
+        margin-right: 4px;
+    }
+}
+
 /**
  * SOP JSON Viewer - Modern Admin Styles
  */

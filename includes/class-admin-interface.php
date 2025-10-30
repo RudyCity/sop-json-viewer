@@ -11,7 +11,36 @@ class SOP_JSON_Viewer_Admin {
         $this->plugin = $plugin;
     }
 
+    private function get_saved_sops() {
+        global $wpdb;
+
+        $saved_sops = array();
+
+        // Get all options that start with 'sjp_sop_data_'
+        $sop_options = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT option_name, option_value FROM {$wpdb->options}
+                 WHERE option_name LIKE %s
+                 ORDER BY option_name ASC",
+                'sjp_sop_data_%'
+            )
+        );
+
+        foreach ($sop_options as $option) {
+            $sop_id = str_replace('sjp_sop_data_', '', $option->option_name);
+            $sop_data = maybe_unserialize($option->option_value);
+
+            if (is_array($sop_data) && !empty($sop_data)) {
+                $saved_sops[$sop_id] = $sop_data;
+            }
+        }
+
+        return $saved_sops;
+    }
+
     public function admin_page_callback() {
+        // Get all saved SOPs
+        $saved_sops = $this->get_saved_sops();
         ?>
         <div class="sjp-admin-wrapper">
             <div class="sjp-admin-header">
@@ -26,6 +55,71 @@ class SOP_JSON_Viewer_Admin {
                     </button>
                 </div>
             </div>
+
+            <!-- Saved SOPs Table -->
+            <?php if (!empty($saved_sops)): ?>
+            <div class="sjp-saved-sops-section">
+                <div class="sjp-panel-header">
+                    <h2><?php _e('Saved SOPs', 'sop-json-viewer'); ?></h2>
+                    <span class="sjp-sop-count"><?php printf(_n('%d SOP saved', '%d SOPs saved', count($saved_sops), 'sop-json-viewer'), count($saved_sops)); ?></span>
+                </div>
+                <div class="sjp-saved-sops-table-wrapper">
+                    <table class="sjp-saved-sops-table">
+                        <thead>
+                            <tr>
+                                <th><?php _e('SOP ID', 'sop-json-viewer'); ?></th>
+                                <th><?php _e('Title', 'sop-json-viewer'); ?></th>
+                                <th><?php _e('Sections', 'sop-json-viewer'); ?></th>
+                                <th><?php _e('Last Modified', 'sop-json-viewer'); ?></th>
+                                <th><?php _e('Actions', 'sop-json-viewer'); ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($saved_sops as $sop_id => $sop_data): ?>
+                            <tr>
+                                <td class="sjp-sop-id">
+                                    <code><?php echo esc_html($sop_id); ?></code>
+                                </td>
+                                <td class="sjp-sop-title">
+                                    <?php echo esc_html($sop_data['title'] ?? __('Untitled SOP', 'sop-json-viewer')); ?>
+                                </td>
+                                <td class="sjp-sop-sections">
+                                    <?php
+                                    $section_count = isset($sop_data['sections']) ? count($sop_data['sections']) : 0;
+                                    printf(_n('%d section', '%d sections', $section_count, 'sop-json-viewer'), $section_count);
+                                    ?>
+                                </td>
+                                <td class="sjp-sop-modified">
+                                    <?php
+                                    $modified_time = get_option('sjp_sop_modified_' . $sop_id);
+                                    if ($modified_time) {
+                                        echo esc_html(human_time_diff(strtotime($modified_time), current_time('timestamp')) . ' ' . __('ago', 'sop-json-viewer'));
+                                    } else {
+                                        echo __('Unknown', 'sop-json-viewer');
+                                    }
+                                    ?>
+                                </td>
+                                <td class="sjp-sop-actions">
+                                    <button type="button" class="sjp-btn sjp-btn-sm sjp-btn-secondary sjp-load-sop"
+                                            data-sop-id="<?php echo esc_attr($sop_id); ?>"
+                                            title="<?php _e('Load this SOP for editing', 'sop-json-viewer'); ?>">
+                                        <span class="dashicons dashicons-edit"></span>
+                                        <?php _e('Edit', 'sop-json-viewer'); ?>
+                                    </button>
+                                    <button type="button" class="sjp-btn sjp-btn-sm sjp-btn-danger sjp-delete-sop"
+                                            data-sop-id="<?php echo esc_attr($sop_id); ?>"
+                                            title="<?php _e('Delete this SOP', 'sop-json-viewer'); ?>">
+                                        <span class="dashicons dashicons-trash"></span>
+                                        <?php _e('Delete', 'sop-json-viewer'); ?>
+                                    </button>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <?php endif; ?>
 
             <div class="sjp-admin-layout">
                 <!-- Main Editor Section -->

@@ -30,6 +30,7 @@ class SOP_JSON_Viewer {
         add_action('wp_ajax_sjp_save_sop_data', array($this, 'ajax_save_sop_data'));
         add_action('wp_ajax_sjp_load_sop_data', array($this, 'ajax_load_sop_data'));
         add_action('wp_ajax_sjp_validate_json', array($this, 'ajax_validate_json'));
+        add_action('wp_ajax_sjp_delete_sop_data', array($this, 'ajax_delete_sop_data'));
 
         // Initialize admin interface
         $this->admin = new SOP_JSON_Viewer_Admin($this);
@@ -457,6 +458,9 @@ class SOP_JSON_Viewer {
         $result = update_option('sjp_sop_data_' . $sop_id, $sanitized_data);
 
         if ($result) {
+            // Save modification timestamp
+            update_option('sjp_sop_modified_' . $sop_id, current_time('mysql'));
+
             // Clear cache jika ada
             wp_cache_delete('sjp_sop_data_' . $sop_id);
 
@@ -554,6 +558,56 @@ class SOP_JSON_Viewer {
             // Get errors
             $errors = $validator->get_errors();
             wp_send_json_error(implode(', ', $errors));
+        }
+    }
+
+    public function ajax_delete_sop_data() {
+        // Check nonce untuk security
+        if (!wp_verify_nonce($_POST['nonce'], 'sjp_nonce')) {
+            error_log('[SOP JSON Viewer] Delete failed: Security check failed for SOP data delete attempt');
+            wp_send_json_error('Security check failed');
+        }
+
+        // Check user capability
+        if (!current_user_can('manage_options')) {
+            error_log('[SOP JSON Viewer] Delete failed: Insufficient permissions for user ' . get_current_user_id());
+            wp_send_json_error('Insufficient permissions');
+        }
+
+        $sop_id = sanitize_text_field($_POST['sop_id']);
+
+        if (empty($sop_id)) {
+            wp_send_json_error('SOP ID is required');
+        }
+
+        // Log delete attempt
+        error_log(sprintf(
+            '[SOP JSON Viewer] Delete attempt - SOP ID: %s, User ID: %d',
+            $sop_id,
+            get_current_user_id()
+        ));
+
+        // Delete the SOP data
+        $result = delete_option('sjp_sop_data_' . $sop_id);
+
+        if ($result) {
+            // Also delete the modified timestamp
+            delete_option('sjp_sop_modified_' . $sop_id);
+
+            // Clear cache jika ada
+            wp_cache_delete('sjp_sop_data_' . $sop_id);
+
+            error_log(sprintf(
+                '[SOP JSON Viewer] Delete successful - SOP ID: %s',
+                $sop_id
+            ));
+            wp_send_json_success('SOP data deleted successfully');
+        } else {
+            error_log(sprintf(
+                '[SOP JSON Viewer] Delete failed - SOP ID: %s, Option may not exist',
+                $sop_id
+            ));
+            wp_send_json_error('Failed to delete SOP data or SOP does not exist');
         }
     }
 
