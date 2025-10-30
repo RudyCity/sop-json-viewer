@@ -3,7 +3,7 @@
  * Plugin Name: SOP JSON Viewer
  * Plugin URI: mailto:hrudy715@gmail.com/sop-json-viewer
  * Description: Plugin WordPress untuk menampilkan konten SOP dalam format accordion interaktif menggunakan data JSON dengan editor validasi real-time
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Rudy Hermawan
  * Author URI: mailto:hrudy715@gmail.com
  * License: GPL v2 or later

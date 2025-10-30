@@ -64,7 +64,7 @@ Parameter `default_visibility` mengatur apakah section pertama akan ditampilkan 
     {
       "title": "Bagian 1",
       "content": "Konten dengan **Markdown** support",
-      k
+      "expanded": true,
       "subsections": [
         {
           "title": "Sub-bagian 1.1",

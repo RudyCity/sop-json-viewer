@@ -108,7 +108,6 @@ class SOP_JSON_Viewer {
 
     public function register_settings() {
         register_setting('sjp_settings_group', 'sjp_default_sop_id');
-        register_setting('sjp_settings_group', 'sjp_enable_validation');
         register_setting('sjp_settings_group', 'sjp_default_section_visibility');
     }
 
