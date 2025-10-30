@@ -638,10 +638,12 @@ class SOPJSONEditor {
             } else if (message && message.trim()) {
                 content = `<p>${message}</p>`;
             } else {
-                // Default message if empty
-                content = `<p>Ready to validate JSON</p>`;
+                // Hide status when empty
+                statusElement.style.display = 'none';
+                return;
             }
 
+            statusElement.style.display = 'block';
             statusElement.innerHTML = content;
         }
     }

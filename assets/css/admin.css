@@ -1110,6 +1110,11 @@
     pointer-events: auto;
 }
 
+/* Hide empty validation status */
+.sjp-validation-status[style*="display: none"] {
+    display: none !important;
+}
+
 @keyframes sjp-spin {
     to {
         transform: rotate(360deg);
