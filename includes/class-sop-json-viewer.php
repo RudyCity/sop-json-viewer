@@ -62,18 +62,22 @@ class SOP_JSON_Viewer {
 
         // Ensure Dashicons are loaded
         wp_enqueue_style('dashicons');
-        
+
         wp_enqueue_style('sjp-admin-css', SJP_PLUGIN_URL . 'assets/css/admin.css', array('dashicons'), SJP_VERSION);
         wp_enqueue_style('sjp-accordion-css', SJP_PLUGIN_URL . 'assets/css/sop-accordion.css', array(), SJP_VERSION);
-        wp_enqueue_script('sjp-admin-js', SJP_PLUGIN_URL . 'assets/js/admin-editor.js', array(), SJP_VERSION, true);
-        wp_enqueue_script('sjp-accordion-js', SJP_PLUGIN_URL . 'assets/js/sop-accordion.js', array(), SJP_VERSION, true);
-        wp_enqueue_code_editor(array('type' => 'application/json'));
 
-        // Localize AJAX variables untuk admin script
-        wp_localize_script('sjp-admin-js', 'sjp_ajax', array(
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('sjp_nonce')
-        ));
+        // Only load admin editor JS and code editor for the main admin page
+        if ($hook === 'toplevel_page_sjp-admin') {
+            wp_enqueue_script('sjp-admin-js', SJP_PLUGIN_URL . 'assets/js/admin-editor.js', array(), SJP_VERSION, true);
+            wp_enqueue_script('sjp-accordion-js', SJP_PLUGIN_URL . 'assets/js/sop-accordion.js', array(), SJP_VERSION, true);
+            wp_enqueue_code_editor(array('type' => 'application/json'));
+
+            // Localize AJAX variables untuk admin script
+            wp_localize_script('sjp-admin-js', 'sjp_ajax', array(
+                'ajax_url' => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce('sjp_nonce')
+            ));
+        }
     }
 
     public function add_admin_menu() {
