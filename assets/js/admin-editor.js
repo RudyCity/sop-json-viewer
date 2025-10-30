@@ -7,6 +7,7 @@ class SOPJSONEditor {
         this.editor = null;
         this.validationTimer = null;
         this.currentSopId = 'default-sop';
+        this.isLoading = false;
         this.templates = {
             basic: {
                 title: "Basic SOP Template",
@@ -423,7 +424,16 @@ class SOPJSONEditor {
     }
 
     loadSopById(sopId) {
-        if (!this.editor) return;
+        if (!this.editor || this.isLoading) return;
+
+        // Prevent multiple simultaneous loads
+        this.isLoading = true;
+
+        // Clear any existing validation timer
+        if (this.validationTimer) {
+            clearTimeout(this.validationTimer);
+            this.validationTimer = null;
+        }
 
         // Update SOP ID input
         const sopIdInput = document.getElementById('sop_id');
@@ -432,8 +442,15 @@ class SOPJSONEditor {
             this.currentSopId = sopId;
         }
 
+        // Clear editor first
+        this.editor.codemirror.setValue('');
+        this.clearPreview();
+
         // Show loading state
         this.showValidationStatus('warning', `Loading SOP: ${sopId}...`);
+
+        // Disable form inputs during loading
+        this.setFormDisabled(true);
 
         this.makeAjaxRequest(sjp_ajax.ajax_url, {
             action: 'sjp_load_sop_data',
@@ -446,9 +463,17 @@ class SOPJSONEditor {
                 this.showValidationStatus('success', `✅ SOP "${sopId}" loaded successfully`);
             } else {
                 this.showValidationStatus('error', `❌ SOP "${sopId}" not found`);
+                // Load default data if SOP not found
+                this.loadDefaultData();
             }
         }).catch(() => {
             this.showValidationStatus('error', `❌ Error loading SOP "${sopId}"`);
+            // Load default data on error
+            this.loadDefaultData();
+        }).finally(() => {
+            // Re-enable form inputs
+            this.setFormDisabled(false);
+            this.isLoading = false;
         });
     }
 
@@ -652,15 +677,34 @@ class SOPJSONEditor {
     }
 
     loadExistingData() {
-        if (!this.editor) return;
+        if (!this.editor || this.isLoading) return;
 
         const sopIdInput = document.getElementById('sop_id');
         if (!sopIdInput) return;
 
         const sopId = sopIdInput.value;
 
+        // Prevent loading if SOP ID is empty or same as current
+        if (!sopId.trim() || sopId === this.currentSopId) return;
+
+        // Prevent multiple simultaneous loads
+        this.isLoading = true;
+
+        // Clear any existing validation timer
+        if (this.validationTimer) {
+            clearTimeout(this.validationTimer);
+            this.validationTimer = null;
+        }
+
+        // Clear editor first
+        this.editor.codemirror.setValue('');
+        this.clearPreview();
+
         // Show loading state
         this.showValidationStatus('warning', 'Loading existing data...');
+
+        // Disable form inputs during loading
+        this.setFormDisabled(true);
 
         this.makeAjaxRequest(sjp_ajax.ajax_url, {
             action: 'sjp_load_sop_data',
@@ -669,6 +713,7 @@ class SOPJSONEditor {
         }).then((response) => {
             if (response.success && response.data) {
                 this.editor.codemirror.setValue(JSON.stringify(response.data, null, 2));
+                this.currentSopId = sopId;
                 this.validateJSON();
             } else {
                 // Load default template
@@ -676,6 +721,10 @@ class SOPJSONEditor {
             }
         }).catch(() => {
             this.loadDefaultData();
+        }).finally(() => {
+            // Re-enable form inputs
+            this.setFormDisabled(false);
+            this.isLoading = false;
         });
     }
 
@@ -870,6 +919,20 @@ class SOPJSONEditor {
                 }
             });
         });
+    }
+
+    setFormDisabled(disabled) {
+        const form = document.getElementById('sjp-sop-form');
+        if (form) {
+            const inputs = form.querySelectorAll('input, button, textarea, select');
+            inputs.forEach(input => {
+                if (disabled) {
+                    input.setAttribute('disabled', 'disabled');
+                } else {
+                    input.removeAttribute('disabled');
+                }
+            });
+        }
     }
 
     escapeHtml(text) {
