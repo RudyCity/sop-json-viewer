@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Default Visibility - SOP JSON Viewer</title>
+    <link rel="stylesheet" href="assets/css/sop-accordion.css">
+</head>
+<body>
+    <h1>Test Default Visibility Feature</h1>
+
+    <h2>Default Hidden (Collapsed)</h2>
+    <div class="sop-json-viewer" data-sop-id="test-hidden" data-default-visibility="hidden">
+        <h2 class="sop-title">Test SOP - Default Hidden</h2>
+        <p class="sop-description">This accordion should start with all sections collapsed.</p>
+        <div class="sop-accordion" role="tablist" aria-multiselectable="true">
+            <div class="sop-section">
+                <button class="sop-section-header" id="header-section-0" aria-controls="content-section-0" aria-expanded="false" role="tab">
+                    <span class="sop-section-title">Section 1 - Should be collapsed</span>
+                    <span class="sop-toggle-icon" aria-hidden="true">+</span>
+                </button>
+                <div class="sop-section-content" id="content-section-0" aria-labelledby="header-section-0" role="tabpanel" hidden>
+                    <div class="sop-content">
+                        <p>This section should be collapsed by default.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="sop-section">
+                <button class="sop-section-header" id="header-section-1" aria-controls="content-section-1" aria-expanded="false" role="tab">
+                    <span class="sop-section-title">Section 2 - Should be collapsed</span>
+                    <span class="sop-toggle-icon" aria-hidden="true">+</span>
+                </button>
+                <div class="sop-section-content" id="content-section-1" aria-labelledby="header-section-1" role="tabpanel" hidden>
+                    <div class="sop-content">
+                        <p>This section should also be collapsed by default.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2>Default Shown (Expanded)</h2>
+    <div class="sop-json-viewer" data-sop-id="test-shown" data-default-visibility="shown">
+        <h2 class="sop-title">Test SOP - Default Shown</h2>
+        <p class="sop-description">This accordion should start with the first section expanded.</p>
+        <div class="sop-accordion" role="tablist" aria-multiselectable="true">
+            <div class="sop-section">
+                <button class="sop-section-header" id="header-section-2" aria-controls="content-section-2" aria-expanded="true" role="tab">
+                    <span class="sop-section-title">Section 1 - Should be expanded</span>
+                    <span class="sop-toggle-icon" aria-hidden="true">−</span>
+                </button>
+                <div class="sop-section-content" id="content-section-2" aria-labelledby="header-section-2" role="tabpanel">
+                    <div class="sop-content">
+                        <p>This section should be expanded by default.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="sop-section">
+                <button class="sop-section-header" id="header-section-3" aria-controls="content-section-3" aria-expanded="false" role="tab">
+                    <span class="sop-section-title">Section 2 - Should be collapsed</span>
+                    <span class="sop-toggle-icon" aria-hidden="true">+</span>
+                </button>
+                <div class="sop-section-content" id="content-section-3" aria-labelledby="header-section-3" role="tabpanel" hidden>
+                    <div class="sop-content">
+                        <p>This section should be collapsed by default.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/sop-accordion.js"></script>
+</body>
+</html>

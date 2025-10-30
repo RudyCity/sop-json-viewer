@@ -28,6 +28,7 @@ class SOPAccordion {
         this.enhanceLinkAccessibility();
         this.loadDynamicContent();
         this.preloadAnimations();
+        this.handleInitialVisibility();
     }
 
     bindEvents() {
@@ -561,22 +562,55 @@ class SOPAccordion {
         return -1;
     }
 
+    handleInitialVisibility() {
+        const defaultVisibility = this.element.dataset.defaultVisibility || 'hidden';
+
+        if (defaultVisibility === 'shown') {
+            // Find the first section that should be expanded
+            const firstHeader = this.element.querySelector('.sop-accordion > .sop-section > .sop-section-header');
+            const firstContent = this.element.querySelector('.sop-accordion > .sop-section > .sop-section-content');
+
+            if (firstHeader && firstContent) {
+                // Set the currently open section
+                this.currentlyOpen = { header: firstHeader, content: firstContent };
+
+                // Apply expanded styles immediately
+                firstContent.style.maxHeight = 'none';
+                firstContent.style.overflow = 'visible';
+                firstContent.style.opacity = '1';
+                firstContent.style.padding = '0 24px 20px';
+                firstContent.removeAttribute('hidden');
+                firstContent.setAttribute('aria-expanded', 'true');
+
+                // Update header state
+                firstHeader.setAttribute('aria-expanded', 'true');
+                const toggleIcon = firstHeader.querySelector('.sop-toggle-icon');
+                if (toggleIcon) {
+                    toggleIcon.textContent = '−';
+                }
+
+                // Manage nested focus
+                this.manageNestedFocus(firstContent, true);
+            }
+        }
+    }
+
     destroy() {
         // Clean up event listeners
         this.element.removeEventListener('click', this.handleClick);
         this.element.removeEventListener('keydown', this.handleKeydown);
         window.removeEventListener('resize', this.debouncedResize);
         document.removeEventListener('visibilitychange', this.handleVisibilityChange);
-        
+
         // Clean up observers
         if (this.resizeObserver) {
             this.resizeObserver.disconnect();
         }
-        
+
         if (this.intersectionObserver) {
             this.intersectionObserver.disconnect();
         }
-        
+
         // Cancel any ongoing animations
         if (this.rafId) {
             cancelAnimationFrame(this.rafId);

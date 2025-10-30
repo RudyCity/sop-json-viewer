@@ -108,6 +108,7 @@ class SOP_JSON_Viewer {
     public function register_settings() {
         register_setting('sjp_settings_group', 'sjp_default_sop_id');
         register_setting('sjp_settings_group', 'sjp_enable_validation');
+        register_setting('sjp_settings_group', 'sjp_default_section_visibility');
     }
 
     public function admin_page_callback() {
@@ -133,7 +134,8 @@ class SOP_JSON_Viewer {
             $atts = shortcode_atts(array(
                 'id' => '',
                 'class' => '',
-                'fallback' => 'default'
+                'fallback' => 'default',
+                'default_visibility' => get_option('sjp_default_section_visibility', 'hidden')
             ), $atts);
 
             if (empty($atts['id'])) {
@@ -199,7 +201,8 @@ class SOP_JSON_Viewer {
         ob_start();
         ?>
         <div class="sop-json-viewer <?php echo esc_attr($atts['class']); ?>"
-             data-sop-id="<?php echo esc_attr($atts['id']); ?>">
+             data-sop-id="<?php echo esc_attr($atts['id']); ?>"
+             data-default-visibility="<?php echo esc_attr($atts['default_visibility']); ?>">
 
             <?php if (!empty($sop_data['title'])): ?>
                 <h2 class="sop-title"><?php echo esc_html($sop_data['title']); ?></h2>
@@ -210,7 +213,7 @@ class SOP_JSON_Viewer {
             <?php endif; ?>
 
             <div class="sop-accordion" role="tablist" aria-multiselectable="true">
-                <?php echo $this->render_sections($sop_data['sections']); ?>
+                <?php echo $this->render_sections($sop_data['sections'], $atts['default_visibility']); ?>
             </div>
         </div>
         <?php
@@ -237,32 +240,45 @@ class SOP_JSON_Viewer {
         </script>";
     }
 
-    private function render_sections($sections) {
+    private function render_sections($sections, $default_visibility = 'hidden', $section_index = 0) {
         if (empty($sections)) {
             return '';
         }
 
         $output = '';
         foreach ($sections as $index => $section) {
-            $section_id = 'section-' . $index;
+            $section_id = 'section-' . ($section_index + $index);
+
+            // Check for per-section expanded property first, then fall back to default_visibility
+            $section_expanded = isset($section['expanded']) ? $section['expanded'] : null;
+
+            if ($section_expanded !== null) {
+                // Per-section setting takes precedence
+                $should_be_expanded = (bool) $section_expanded;
+            } else {
+                // Use global default_visibility logic
+                $is_first_section = ($section_index === 0 && $index === 0);
+                $should_be_expanded = ($default_visibility === 'shown' && $is_first_section);
+            }
+
             $output .= '<div class="sop-section">';
 
             // Section header
             $output .= '<button class="sop-section-header"
                               id="header-' . $section_id . '"
                               aria-controls="content-' . $section_id . '"
-                              aria-expanded="false"
+                              aria-expanded="' . ($should_be_expanded ? 'true' : 'false') . '"
                               role="tab">
                 <span class="sop-section-title">' . esc_html($section['title']) . '</span>
-                <span class="sop-toggle-icon" aria-hidden="true">+</span>
+                <span class="sop-toggle-icon" aria-hidden="true">' . ($should_be_expanded ? '−' : '+') . '</span>
             </button>';
 
             // Section content
             $output .= '<div class="sop-section-content"
                              id="content-' . $section_id . '"
                              aria-labelledby="header-' . $section_id . '"
-                             role="tabpanel"
-                             hidden>';
+                             role="tabpanel"'
+                             . ($should_be_expanded ? '' : ' hidden') . '>';
 
             if (!empty($section['content'])) {
                 // Extract sort options from section
@@ -271,14 +287,14 @@ class SOP_JSON_Viewer {
                     'sort_by' => isset($section['sort_by']) ? $section['sort_by'] : 'title',
                     'sort_order' => isset($section['sort_order']) ? $section['sort_order'] : 'asc'
                 );
-                
+
                 $output .= $this->render_content($section['content'], $sort_options);
             }
 
             // Render subsections jika ada
             if (!empty($section['subsections'])) {
                 $output .= '<div class="sop-subsections">';
-                $output .= $this->render_sections($section['subsections']);
+                $output .= $this->render_sections($section['subsections'], $default_visibility);
                 $output .= '</div>';
             }
 

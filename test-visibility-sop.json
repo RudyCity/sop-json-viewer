@@ -1,0 +1,59 @@
+{
+  "title": "Test Per-Section Visibility SOP",
+  "description": "Testing the new per-section visibility feature for accordion sections",
+  "sections": [
+    {
+      "title": "Introduction Section (Always Expanded)",
+      "content": "This section is set to expanded=true, so it will always be open regardless of global settings.",
+      "expanded": true
+    },
+    {
+      "title": "Second Section (Always Collapsed)",
+      "content": "This section is set to expanded=false, so it will always be closed regardless of global settings.",
+      "expanded": false
+    },
+    {
+      "title": "Third Section (Default Behavior)",
+      "content": "This section has no expanded property, so it follows the global default_visibility setting."
+    },
+    {
+      "title": "Fourth Section with Links",
+      "content": [
+        {
+          "type": "link",
+          "title": "Documentation",
+          "url": "https://example.com/docs",
+          "target": "_blank"
+        },
+        {
+          "type": "link",
+          "title": "Support",
+          "url": "https://example.com/support",
+          "target": "_blank"
+        }
+      ],
+      "expanded": true
+    },
+    {
+      "title": "Section with Subsections",
+      "content": "This section contains subsections for testing nested accordion behavior.",
+      "expanded": false,
+      "subsections": [
+        {
+          "title": "Subsection 1 (Expanded)",
+          "content": "First subsection content - this one is expanded.",
+          "expanded": true
+        },
+        {
+          "title": "Subsection 2 (Collapsed)",
+          "content": "Second subsection content - this one is collapsed.",
+          "expanded": false
+        },
+        {
+          "title": "Subsection 3 (Default)",
+          "content": "Third subsection content - follows global setting."
+        }
+      ]
+    }
+  ]
+}

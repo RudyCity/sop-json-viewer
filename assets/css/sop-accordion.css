@@ -148,6 +148,25 @@
     transition: max-height var(--transition-normal) ease-out, opacity var(--transition-normal) ease-out;
 }
 
+/* Initial expanded state for default visibility */
+.sop-json-viewer[data-default-visibility="shown"] .sop-accordion > .sop-section:first-child .sop-section-content {
+    max-height: none !important;
+    padding: 0 24px 20px;
+    opacity: 1;
+    overflow: visible;
+}
+
+.sop-json-viewer[data-default-visibility="shown"] .sop-accordion > .sop-section:first-child .sop-section-header {
+    background: var(--primary-light);
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.sop-json-viewer[data-default-visibility="shown"] .sop-accordion > .sop-section:first-child .sop-toggle-icon {
+    transform: rotate(45deg);
+    color: var(--primary-color);
+}
+
 /* Ensure smooth transition when closing */
 .sop-section-content[aria-expanded="false"] {
     opacity: 0;

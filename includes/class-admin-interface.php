@@ -271,6 +271,22 @@ class SOP_JSON_Viewer_Admin {
                                 </p>
                             </div>
                             <div class="sjp-setting-field">
+                                <label for="sjp_default_section_visibility"><?php _e('Default Section Visibility', 'sop-json-viewer'); ?></label>
+                                <select id="sjp_default_section_visibility"
+                                        name="sjp_default_section_visibility"
+                                        class="sjp-setting-input">
+                                    <option value="hidden" <?php selected(get_option('sjp_default_section_visibility', 'hidden'), 'hidden'); ?>>
+                                        <?php _e('Hidden (Collapsed)', 'sop-json-viewer'); ?>
+                                    </option>
+                                    <option value="shown" <?php selected(get_option('sjp_default_section_visibility', 'hidden'), 'shown'); ?>>
+                                        <?php _e('Shown (Expanded)', 'sop-json-viewer'); ?>
+                                    </option>
+                                </select>
+                                <p class="sjp-setting-description">
+                                    <?php _e('Default visibility state for accordion sections when first loaded. "Shown" will expand the first section by default.', 'sop-json-viewer'); ?>
+                                </p>
+                            </div>
+                            <div class="sjp-setting-field">
                                 <label for="sjp_animation_duration"><?php _e('Animation Duration (ms)', 'sop-json-viewer'); ?></label>
                                 <input type="number"
                                        id="sjp_animation_duration"

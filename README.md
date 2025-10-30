@@ -12,6 +12,7 @@ Plugin WordPress untuk menampilkan konten SOP dalam format accordion interaktif 
 - 📥 Import/Export functionality untuk backup
 - 🎭 Support nested accordion untuk sub-procedures
 - 🔗 File link integration dalam konten
+- 👁️ Default visibility control (shown/hidden) untuk sections
 
 ## Installation
 
@@ -31,6 +32,14 @@ Plugin WordPress untuk menampilkan konten SOP dalam format accordion interaktif 
 ```php
 [sop-accordion id="my-sop" class="custom-style"]
 ```
+
+### Shortcode dengan Default Visibility
+```php
+[sop-accordion id="my-sop" default_visibility="shown"]
+[sop-accordion id="my-sop" default_visibility="hidden"]
+```
+
+Parameter `default_visibility` mengatur apakah section pertama akan ditampilkan terbuka ("shown") atau tertutup ("hidden") saat pertama kali dimuat.
 
 ### Menggunakan di PHP Template
 ```php
@@ -55,22 +64,40 @@ Plugin WordPress untuk menampilkan konten SOP dalam format accordion interaktif 
     {
       "title": "Bagian 1",
       "content": "Konten dengan **Markdown** support",
+      "expanded": true,
       "subsections": [
         {
           "title": "Sub-bagian 1.1",
-          "content": "Konten sub-bagian"
+          "content": "Konten sub-bagian",
+          "expanded": false
         }
       ]
+    },
+    {
+      "title": "Bagian 2",
+      "content": "Konten bagian kedua",
+      "expanded": false
     }
   ]
 }
 ```
+
+### Section Properties
+
+- `title` (string, required): Judul section
+- `content` (string/array, required): Konten section atau array of content items
+- `expanded` (boolean, optional): Mengatur apakah section terbuka secara default
+  - `true`: Section akan terbuka saat pertama dimuat
+  - `false`: Section akan tertutup saat pertama dimuat
+  - Jika tidak dispesifikasikan, menggunakan pengaturan global atau default
+- `subsections` (array, optional): Array of subsection objects dengan struktur yang sama
 
 ## Settings
 
 ### General Settings
 - **Default SOP ID**: SOP ID default ketika tidak dispesifikasikan
 - **Animation Duration**: Durasi animasi accordion (ms)
+- **Default Section Visibility**: Mengatur apakah section pertama akan terbuka ("Shown") atau tertutup ("Hidden") secara default
 
 ### Performance Settings
 - **Enable Caching**: Aktifkan caching untuk performance
@@ -100,6 +127,12 @@ Plugin WordPress untuk menampilkan konten SOP dalam format accordion interaktif 
    - Check plugin conflicts
 
 ## Changelog
+
+### Version 1.0.1
+- Added default section visibility control
+- New `default_visibility` shortcode parameter
+- Admin setting for global default visibility
+- Enhanced accordion initial state handling
 
 ### Version 1.0.0
 - Initial release
