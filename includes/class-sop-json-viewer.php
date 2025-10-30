@@ -54,17 +54,14 @@ class SOP_JSON_Viewer {
     }
 
     public function enqueue_admin_assets($hook) {
-        $allowed_hooks = array('toplevel_page_sjp-admin', 'sop-json-viewer_page_sjp-settings');
+        // Load CSS for all admin pages
+        if (strpos($hook, 'sjp') !== false || strpos($hook, 'sop-json-viewer') !== false) {
+            // Ensure Dashicons are loaded
+            wp_enqueue_style('dashicons');
 
-        if (!in_array($hook, $allowed_hooks)) {
-            return;
+            wp_enqueue_style('sjp-admin-css', SJP_PLUGIN_URL . 'assets/css/admin.css', array('dashicons'), SJP_VERSION);
+            wp_enqueue_style('sjp-accordion-css', SJP_PLUGIN_URL . 'assets/css/sop-accordion.css', array(), SJP_VERSION);
         }
-
-        // Ensure Dashicons are loaded
-        wp_enqueue_style('dashicons');
-
-        wp_enqueue_style('sjp-admin-css', SJP_PLUGIN_URL . 'assets/css/admin.css', array('dashicons'), SJP_VERSION);
-        wp_enqueue_style('sjp-accordion-css', SJP_PLUGIN_URL . 'assets/css/sop-accordion.css', array(), SJP_VERSION);
 
         // Only load admin editor JS and code editor for the main admin page
         if ($hook === 'toplevel_page_sjp-admin') {
