@@ -341,56 +341,142 @@ class SOP_JSON_Viewer_Admin {
 
     public function settings_page_callback() {
         ?>
-        <div class="wrap">
-            <h1><?php _e('SOP JSON Viewer - Settings', 'sop-json-viewer'); ?></h1>
-            <p class="sjp-settings-intro"><?php _e('Configure your SOP JSON Viewer plugin settings below. Changes are automatically saved.', 'sop-json-viewer'); ?></p>
+        <div class="sjp-settings-wrapper">
+            <!-- Header Section -->
+            <div class="sjp-settings-header">
+                <div class="sjp-settings-header-content">
+                    <div class="sjp-settings-icon">
+                        <span class="dashicons dashicons-admin-settings"></span>
+                    </div>
+                    <div class="sjp-settings-title">
+                        <h1><?php _e('SOP JSON Viewer Settings', 'sop-json-viewer'); ?></h1>
+                        <p><?php _e('Configure how your SOP accordions behave across your site', 'sop-json-viewer'); ?></p>
+                    </div>
+                </div>
+            </div>
 
-            <form method="post" action="options.php" class="sjp-settings-form">
-                <?php settings_fields('sjp_settings_group'); ?>
+            <!-- Settings Form -->
+            <div class="sjp-settings-content">
+                <form method="post" action="options.php" class="sjp-settings-form-modern">
+                    <?php settings_fields('sjp_settings_group'); ?>
 
-                <div class="sjp-settings-container">
-                    <div class="sjp-settings-section">
-                        <h3><?php _e('General Settings', 'sop-json-viewer'); ?></h3>
-                        <div class="sjp-settings-content">
-                            <div class="sjp-setting-field">
-                                <label for="sjp_default_sop_id"><?php _e('Default SOP ID', 'sop-json-viewer'); ?></label>
-                                <input type="text"
-                                       id="sjp_default_sop_id"
-                                       name="sjp_default_sop_id"
-                                       value="<?php echo esc_attr(get_option('sjp_default_sop_id', 'default-sop')); ?>"
-                                       class="sjp-setting-input regular-text"
-                                       placeholder="default-sop" />
-                                <p class="sjp-setting-description">
-                                    <?php _e('Default SOP ID to use when none specified in shortcode. Use lowercase letters and hyphens only.', 'sop-json-viewer'); ?>
-                                </p>
+                    <!-- General Settings Card -->
+                    <div class="sjp-settings-card">
+                        <div class="sjp-card-header">
+                            <div class="sjp-card-icon">
+                                <span class="dashicons dashicons-admin-generic"></span>
                             </div>
-                            <div class="sjp-setting-field">
-                                <label for="sjp_default_section_visibility"><?php _e('Default Section Visibility', 'sop-json-viewer'); ?></label>
-                                <select id="sjp_default_section_visibility"
-                                        name="sjp_default_section_visibility"
-                                        class="sjp-setting-input">
-                                    <option value="hidden" <?php selected(get_option('sjp_default_section_visibility', 'hidden'), 'hidden'); ?>>
-                                        <?php _e('Hidden (Collapsed)', 'sop-json-viewer'); ?>
-                                    </option>
-                                    <option value="shown" <?php selected(get_option('sjp_default_section_visibility', 'hidden'), 'shown'); ?>>
-                                        <?php _e('Shown (Expanded)', 'sop-json-viewer'); ?>
-                                    </option>
-                                </select>
-                                <p class="sjp-setting-description">
-                                    <?php _e('Default visibility state for accordion sections when first loaded. "Shown" will expand the first section by default.', 'sop-json-viewer'); ?>
-                                </p>
+                            <div class="sjp-card-title">
+                                <h2><?php _e('General Configuration', 'sop-json-viewer'); ?></h2>
+                                <p><?php _e('Basic settings that control your SOP viewer behavior', 'sop-json-viewer'); ?></p>
+                            </div>
+                        </div>
+
+                        <div class="sjp-card-content">
+                            <!-- Default SOP ID Field -->
+                            <div class="sjp-setting-item">
+                                <div class="sjp-setting-item-header">
+                                    <div class="sjp-setting-icon">
+                                        <span class="dashicons dashicons-id"></span>
+                                    </div>
+                                    <div class="sjp-setting-label">
+                                        <label for="sjp_default_sop_id"><?php _e('Default SOP ID', 'sop-json-viewer'); ?></label>
+                                        <span class="sjp-setting-badge"><?php _e('Required', 'sop-json-viewer'); ?></span>
+                                    </div>
+                                </div>
+                                <div class="sjp-setting-input-wrapper">
+                                    <input type="text"
+                                           id="sjp_default_sop_id"
+                                           name="sjp_default_sop_id"
+                                           value="<?php echo esc_attr(get_option('sjp_default_sop_id', 'default-sop')); ?>"
+                                           class="sjp-setting-input-modern"
+                                           placeholder="default-sop" />
+                                    <div class="sjp-setting-description">
+                                        <p><?php _e('This ID is used when no specific SOP ID is provided in shortcodes. Use lowercase letters, numbers, and hyphens only.', 'sop-json-viewer'); ?></p>
+                                        <div class="sjp-setting-example">
+                                            <strong><?php _e('Example:', 'sop-json-viewer'); ?></strong>
+                                            <code>[sop-accordion]</code> <?php _e('will use this default ID', 'sop-json-viewer'); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Default Section Visibility Field -->
+                            <div class="sjp-setting-item">
+                                <div class="sjp-setting-item-header">
+                                    <div class="sjp-setting-icon">
+                                        <span class="dashicons dashicons-visibility"></span>
+                                    </div>
+                                    <div class="sjp-setting-label">
+                                        <label for="sjp_default_section_visibility"><?php _e('Accordion Behavior', 'sop-json-viewer'); ?></label>
+                                        <span class="sjp-setting-badge sjp-badge-info"><?php _e('UX Setting', 'sop-json-viewer'); ?></span>
+                                    </div>
+                                </div>
+                                <div class="sjp-setting-input-wrapper">
+                                    <select id="sjp_default_section_visibility"
+                                            name="sjp_default_section_visibility"
+                                            class="sjp-setting-select-modern">
+                                        <option value="hidden" <?php selected(get_option('sjp_default_section_visibility', 'hidden'), 'hidden'); ?>>
+                                            📕 <?php _e('All Sections Collapsed', 'sop-json-viewer'); ?>
+                                        </option>
+                                        <option value="shown" <?php selected(get_option('sjp_default_section_visibility', 'hidden'), 'shown'); ?>>
+                                            📖 <?php _e('First Section Expanded', 'sop-json-viewer'); ?>
+                                        </option>
+                                    </select>
+                                    <div class="sjp-setting-description">
+                                        <p><?php _e('Choose how accordion sections appear when the page first loads.', 'sop-json-viewer'); ?></p>
+                                        <div class="sjp-setting-options">
+                                            <div class="sjp-option-item">
+                                                <strong><?php _e('Collapsed:', 'sop-json-viewer'); ?></strong> <?php _e('Users start with all sections closed, encouraging exploration.', 'sop-json-viewer'); ?>
+                                            </div>
+                                            <div class="sjp-option-item">
+                                                <strong><?php _e('Expanded:', 'sop-json-viewer'); ?></strong> <?php _e('First section opens automatically, showing immediate content.', 'sop-json-viewer'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="sjp-settings-actions">
-                    <?php submit_button(__('Save All Settings', 'sop-json-viewer'), 'primary sjp-btn sjp-btn-large', 'submit', true); ?>
-                    <button type="button" class="sjp-btn sjp-btn-secondary" onclick="history.back()">
-                        <?php _e('Cancel', 'sop-json-viewer'); ?>
-                    </button>
+                    <!-- Action Buttons -->
+                    <div class="sjp-settings-actions-modern">
+                        <div class="sjp-actions-content">
+                            <div class="sjp-actions-info">
+                                <span class="dashicons dashicons-info-outline"></span>
+                                <span><?php _e('Changes are saved automatically when you click Save Settings', 'sop-json-viewer'); ?></span>
+                            </div>
+                            <div class="sjp-actions-buttons">
+                                <?php submit_button(__('Save Settings', 'sop-json-viewer'), 'primary sjp-btn-modern sjp-btn-save', 'submit', false); ?>
+                                <button type="button" class="sjp-btn-modern sjp-btn-cancel" onclick="history.back()">
+                                    <span class="dashicons dashicons-undo"></span>
+                                    <?php _e('Cancel', 'sop-json-viewer'); ?>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Footer -->
+            <div class="sjp-settings-footer">
+                <div class="sjp-footer-content">
+                    <div class="sjp-footer-info">
+                        <span class="dashicons dashicons-admin-plugins"></span>
+                        <span><?php _e('SOP JSON Viewer Plugin', 'sop-json-viewer'); ?></span>
+                    </div>
+                    <div class="sjp-footer-links">
+                        <a href="<?php echo admin_url('admin.php?page=sjp-admin'); ?>" class="sjp-footer-link">
+                            <span class="dashicons dashicons-edit"></span>
+                            <?php _e('Manage SOPs', 'sop-json-viewer'); ?>
+                        </a>
+                        <a href="#" class="sjp-footer-link" id="sjp-help-link">
+                            <span class="dashicons dashicons-editor-help"></span>
+                            <?php _e('Help & Documentation', 'sop-json-viewer'); ?>
+                        </a>
+                    </div>
                 </div>
-            </form>
+            </div>
         </div>
         <?php
     }

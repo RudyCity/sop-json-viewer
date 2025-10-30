@@ -1115,6 +1115,406 @@
     display: none !important;
 }
 
+/* Modern Settings Page Styles */
+.sjp-settings-wrapper {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+    background: #f8fafc;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+.sjp-settings-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px 0 60px;
+    margin: -20px -20px 40px;
+}
+
+.sjp-settings-header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.sjp-settings-icon {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sjp-settings-icon .dashicons {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+}
+
+.sjp-settings-title h1 {
+    margin: 0 0 8px 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+.sjp-settings-title p {
+    margin: 0;
+    font-size: 1.1rem;
+    opacity: 0.9;
+    font-weight: 400;
+}
+
+.sjp-settings-content {
+    max-width: 1200px;
+    margin: -40px auto 0;
+    padding: 0 40px 60px;
+}
+
+.sjp-settings-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 32px;
+}
+
+.sjp-card-header {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    padding: 32px 40px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.sjp-card-icon {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sjp-card-icon .dashicons {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    color: #667eea;
+}
+
+.sjp-card-title h2 {
+    margin: 0 0 4px 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.sjp-card-title p {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+.sjp-card-content {
+    padding: 40px;
+}
+
+.sjp-setting-item {
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.sjp-setting-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.sjp-setting-item-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.sjp-setting-icon {
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sjp-setting-icon .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: #64748b;
+}
+
+.sjp-setting-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.sjp-setting-label label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0;
+    cursor: pointer;
+}
+
+.sjp-setting-badge {
+    background: #ef4444;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sjp-setting-badge.sjp-badge-info {
+    background: #3b82f6;
+}
+
+.sjp-setting-input-wrapper {
+    margin-left: 60px;
+}
+
+.sjp-setting-input-modern,
+.sjp-setting-select-modern {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    transition: all 0.2s ease;
+    margin-bottom: 12px;
+}
+
+.sjp-setting-input-modern:focus,
+.sjp-setting-select-modern:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.sjp-setting-select-modern {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+.sjp-setting-description {
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.sjp-setting-example {
+    background: #f8fafc;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-top: 8px;
+    border-left: 3px solid #667eea;
+}
+
+.sjp-setting-example code {
+    background: #e2e8f0;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.85rem;
+}
+
+.sjp-setting-options {
+    margin-top: 12px;
+}
+
+.sjp-option-item {
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    background: #f8fafc;
+    border-radius: 6px;
+    border-left: 3px solid #10b981;
+}
+
+.sjp-option-item:nth-child(2) {
+    border-left-color: #f59e0b;
+}
+
+.sjp-settings-actions-modern {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    padding: 32px 40px;
+    margin-top: 32px;
+}
+
+.sjp-actions-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.sjp-actions-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.sjp-actions-info .dashicons {
+    color: #10b981;
+}
+
+.sjp-actions-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.sjp-btn-modern {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sjp-btn-save {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.sjp-btn-save:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+.sjp-btn-cancel {
+    background: #f1f5f9;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+}
+
+.sjp-btn-cancel:hover {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.sjp-settings-footer {
+    background: #1e293b;
+    color: white;
+    padding: 24px 0;
+    margin-top: 60px;
+}
+
+.sjp-footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sjp-footer-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+.sjp-footer-links {
+    display: flex;
+    gap: 24px;
+}
+
+.sjp-footer-link {
+    color: #cbd5e1;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.sjp-footer-link:hover {
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sjp-settings-header-content,
+    .sjp-settings-content,
+    .sjp-footer-content {
+        padding: 0 20px;
+    }
+
+    .sjp-settings-title h1 {
+        font-size: 2rem;
+    }
+
+    .sjp-card-header,
+    .sjp-card-content {
+        padding: 24px 20px;
+    }
+
+    .sjp-setting-input-wrapper {
+        margin-left: 0;
+    }
+
+    .sjp-actions-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .sjp-actions-buttons {
+        justify-content: center;
+    }
+
+    .sjp-footer-content {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .sjp-footer-links {
+        justify-content: center;
+    }
+}
+
 @keyframes sjp-spin {
     to {
         transform: rotate(360deg);
